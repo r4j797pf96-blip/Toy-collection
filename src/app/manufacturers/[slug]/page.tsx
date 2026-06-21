@@ -52,6 +52,26 @@ export default async function ManufacturerDetailPage({
           ))}
       </dl>
 
+      {manufacturer.sources && manufacturer.sources.length > 0 && (
+        <div className="mt-6 max-w-2xl">
+          <h2 className="text-xs uppercase tracking-wide text-muted mb-2">Sources</h2>
+          <ul className="space-y-1">
+            {manufacturer.sources.map((url) => (
+              <li key={url} className="text-sm truncate">
+                <a
+                  href={url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-accent hover:underline"
+                >
+                  {url}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+
       {toys.length > 0 && (
         <section className="mt-12">
           <h2 className="font-serif text-2xl mb-4">

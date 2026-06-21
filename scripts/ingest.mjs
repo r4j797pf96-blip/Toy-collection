@@ -167,15 +167,31 @@ function ingestLivros(wb) {
     });
 }
 
+const RESEARCH_FILE = path.join(ROOT, "data/research/manufacturers.json");
+
+function loadManufacturerResearch() {
+  if (!fs.existsSync(RESEARCH_FILE)) return {};
+  const raw = JSON.parse(fs.readFileSync(RESEARCH_FILE, "utf-8"));
+  delete raw._readme;
+  const byLowerTrademark = new Map();
+  for (const [trademark, entry] of Object.entries(raw)) {
+    byLowerTrademark.set(trademark.toLowerCase(), entry);
+  }
+  return byLowerTrademark;
+}
+
 function ingestFabricantes(wb) {
   const ws = wb.Sheets["fabricantes"];
   const rows = XLSX.utils.sheet_to_json(ws, { header: 1, defval: undefined });
   const [, ...data] = rows;
+  const research = loadManufacturerResearch();
 
   return data
     .filter((r) => r[1] !== undefined)
     .map((r, idx) => {
       const trademark = cell(r, 1);
+      const extra = trademark ? research.get(trademark.toLowerCase()) : undefined;
+
       return {
         id: idx + 1,
         slug: slugify(trademark),
@@ -183,13 +199,14 @@ function ingestFabricantes(wb) {
         trademark,
         manufacturer: cell(r, 2),
         address: cell(r, 3),
-        country: cell(r, 4),
-        startActivity: cell(r, 5),
-        endActivity: cell(r, 6),
+        country: cell(r, 4) ?? extra?.country,
+        startActivity: cell(r, 5) ?? extra?.startActivity,
+        endActivity: cell(r, 6) ?? extra?.endActivity,
         founder: cell(r, 7),
-        history: cell(r, 8),
+        history: cell(r, 8) ?? extra?.history,
         typesOfToys: cell(r, 9),
         bibliography: cell(r, 10),
+        sources: extra?.sources,
       };
     });
 }

@@ -1,0 +1,209 @@
+{
+  "_readme": "Supplementary manufacturer research, keyed by trademark (case-insensitive). Merged into generated manufacturer data at ingest time, filling in gaps left by the spreadsheet — never overwrites existing spreadsheet values. Each entry's `sources` are the URLs used to confirm its facts. No logo images are included here: none could be independently verified during research, so none are shown on the site.",
+  "Lehmann": {
+    "country": "Germany",
+    "startActivity": "1881",
+    "history": "A German maker of tinplate wind-up toys founded in Brandenburg an der Havel, famous for intricate clockwork novelty toys such as the \"Lehmann-Gnom,\" later expanding into vehicles, trains and airplanes. Regarded as one of the finest classic German tin toy makers. Nationalized in East Germany after WWII; the family re-established the company in West Germany in 1948. Acquired by Märklin in 2007; the brand is still distributed today.",
+    "sources": [
+      "https://www.carters.com.au/index.cfm/index/4455-lehmann-company-germany-toys/",
+      "https://lehmanntoycollection.com/",
+      "https://kallistoys.com/toy-wiki/lehmann/"
+    ]
+  },
+  "Nomura": {
+    "country": "Japan",
+    "history": "Tokyo-based maker (trademark \"TN\" in a diamond), founded in the 1930s by Eijiro Nomura, one of the largest postwar Japanese tinplate toy producers — known for battery-operated robots, vehicles and novelty toys widely exported through the 1950s-70s.",
+    "sources": [
+      "https://www.fabtintoys.com/nomura/",
+      "https://www.ourstarblazers.com/vault/206/"
+    ]
+  },
+  "Modern Toys": {
+    "country": "Japan",
+    "startActivity": "1950",
+    "history": "\"Modern Toys\" (mark \"M-T\") was a tinplate toy line of Masudaya, a Tokyo toy company founded in 1923, that became a leading postwar name in battery-operated robots and vehicles. Masudaya is still in business today.",
+    "sources": [
+      "https://www.fabtintoys.com/masudaya/",
+      "https://en.wikipedia.org/wiki/Masudaya"
+    ]
+  },
+  "TPS": {
+    "country": "Japan",
+    "startActivity": "1956",
+    "endActivity": "1975",
+    "history": "Tokyo Plaything Shokai (originally Toplay Ltd.), founded by three partners — Yoshio Udagawa, Yukio Miyakawa and Yasuo Kushida — known for colorful lithographed tinplate toys aimed at younger children, often produced for US importers like Linemar and Cragstan.",
+    "sources": [
+      "https://www.fabtintoys.com/tps/",
+      "http://tinplatetoys.blogspot.com/2016/02/toplay-tps-ltd.html"
+    ]
+  },
+  "Kohler": {
+    "country": "Germany",
+    "startActivity": "1932",
+    "endActivity": "1997",
+    "history": "Georg Köhler's Nuremberg metal-goods and game factory produced tinplate clockwork animal toys (trademark \"GKN\") — dogs, ducks, squirrels and other figures — expanding the range over several postwar decades.",
+    "sources": ["https://www.fabtintoys.com/kohler/"]
+  },
+  "Arnold": {
+    "country": "Germany",
+    "startActivity": "1906",
+    "endActivity": "1995",
+    "history": "Karl Arnold founded this Nuremberg manufacturer, which produced tinplate toys and model ships before becoming internationally known for pioneering N-scale model trains (\"Arnold Rapido\"). The company went bankrupt in 1995 and was sold to Rivarossi of Italy; the brand survives today under Hornby.",
+    "sources": [
+      "https://en.wikipedia.org/wiki/Arnold_(models)",
+      "https://oldantiquetoys.blogspot.com/2013/01/the-arnold-toy-company.html"
+    ]
+  },
+  "Yonezawa": {
+    "country": "Japan",
+    "endActivity": "1998",
+    "history": "A major Tokyo tinplate toy maker (trademark \"Y\" in a cherry blossom), founded in the 1950s, producing robots, vehicles and ships through the 1970s before shifting to plastic. Absorbed by Sega in 1991; the brand was discontinued in 1998.",
+    "sources": [
+      "http://tinplatetoys.blogspot.com/2016/02/yonezawa-toys-co-ltd.html",
+      "https://www.fabtintoys.com/yonezawa/"
+    ]
+  },
+  "Schuco": {
+    "country": "Germany",
+    "startActivity": "1912",
+    "history": "Founded in Nuremberg by Heinrich Müller and Heinrich Schreyer as Schreyer & Co., known for clever clockwork tin toys and, from 1935, toy motor vehicles — a flagship German toy brand that survived bankruptcy in 1976 and several ownership changes, acquired by the Simba Dickie Group in 1999.",
+    "sources": [
+      "https://en.wikipedia.org/wiki/Schuco_Modell",
+      "https://www.fabtintoys.com/schuco/"
+    ]
+  },
+  "GAMA": {
+    "country": "Germany",
+    "startActivity": "1882",
+    "endActivity": "1994",
+    "history": "Georg Adam Mangold's Fürth, Germany toy factory was known for tinplate mechanical toys, character toys like \"Felix the Cat,\" and later diecast and remote-control vehicles. Closed in 1994 and absorbed by Siku Toys.",
+    "sources": ["https://en.wikipedia.org/wiki/Gama_Toys"]
+  },
+  "Marx": {
+    "country": "USA",
+    "startActivity": "1919",
+    "endActivity": "1980",
+    "history": "Louis Marx and Company, founded in New York by Louis Marx and his brother David, became the world's largest toy manufacturer by the 1950s, producing tin and plastic toys, playsets and mechanical vehicles. Sold to Quaker Oats in 1972, then Dunbee-Combex-Marx in 1976; its last US plant closed in 1980.",
+    "sources": [
+      "https://en.wikipedia.org/wiki/Louis_Marx_and_Company",
+      "https://www.museumofplay.org/blog/x-marx-the-big-spot-in-the-toy-industry/"
+    ]
+  },
+  "Linemar": {
+    "country": "Japan",
+    "history": "Linemar Toys was the Japanese-based manufacturing and import subsidiary of the American toy giant Louis Marx & Co., founded in the early 1950s to make mechanical and battery-operated tinplate toys in Japan at lower cost for export to the US. The name faded out by 1963 as products were rebranded simply \"Marx.\"",
+    "sources": [
+      "https://en.wikipedia.org/wiki/Linemar_Toys",
+      "https://www.fabtintoys.com/linemar/"
+    ]
+  },
+  "Yoneya": {
+    "country": "Japan",
+    "startActivity": "1950",
+    "history": "A Tokyo-based maker of wind-up and mechanical tinplate toys (e.g. \"Acro-Car,\" \"Wonder Bunny,\" \"Wonder Mouse\"), founded in 1950, originally trading as \"S.Y. Toys Co. Ltd.\" before adopting the \"Yone\" trademark in the mid-1960s. Sometimes confused with the unrelated company Yonezawa due to the similar name.",
+    "sources": ["http://tinplatetoys.blogspot.com/2014/11/yoneya-toys-yone-check-list-for-yoneya.html"]
+  },
+  "Biller": {
+    "country": "Germany",
+    "history": "\"Biller Bahn,\" a Nuremberg maker of clockwork toy trains, train accessories and tinplate vehicles, popular as souvenirs with American GIs stationed in postwar Germany. Sources disagree on the exact founding and closing dates.",
+    "sources": ["http://billerpedia.de/Englisch/Einleitung-eng.htm"]
+  },
+  "Blomer & Schuler": {
+    "country": "Germany",
+    "startActivity": "1919",
+    "endActivity": "1974",
+    "history": "A Nuremberg manufacturer that initially made only wind-up clockwork mechanisms for other toymakers, then from around 1930 produced its own lithographed tin toys — notably animal toys like a walking \"Jumbo\" elephant and a tail-swinging turkey. Added tin automobiles around 1950.",
+    "sources": [
+      "https://www.fabtintoys.com/blomer/",
+      "https://collections.vam.ac.uk/item/O1172607/mechanical-toy-blomer--schuler/"
+    ]
+  },
+  "Gescha": {
+    "country": "Germany",
+    "startActivity": "1923",
+    "endActivity": "1973",
+    "history": "Trademark of Gebrüder Schmid, founded in Nuremberg by brothers Max and Ludwig Schmid, initially supplying parts to other toymakers before launching its own tin wind-up toys in 1933, including the popular \"Express Boy\" (1937). Sold to Strenco by 1965; the Gescha brand was discontinued in 1973.",
+    "sources": ["https://en.wikipedia.org/wiki/Gescha_Toys"]
+  },
+  "Technofix": {
+    "country": "Germany",
+    "startActivity": "1922",
+    "endActivity": "1978",
+    "history": "Founded in Nuremberg by brothers Georg and Johann Einfalt with partner Franz Heussinger as Gebrüder Einfalt. Early toys were marked \"G.E.\" or \"G.E.N.\"; the \"Technofix\" trademark dates to around 1926 and was formally adopted as the company name around 1935. Known for elaborate lithographed tin track toys, produced into the late 1970s.",
+    "sources": ["https://www.antiquetoyworld.com/einfalt-technofix-fascinating-track-toys-1922-1978/"]
+  },
+  "Einfalt": {
+    "country": "Germany",
+    "startActivity": "1922",
+    "endActivity": "1935",
+    "history": "Gebrüder Einfalt, founded in Nuremberg in 1922 by brothers Georg and Johann Einfalt with partner Franz Heussinger. The firm renamed itself Technofix around 1935 (see the Technofix entry) — pre-1935 toys are identifiable by \"G.E.\" or \"G.E.N.\" markings.",
+    "sources": ["https://www.antiquetoyworld.com/einfalt-technofix-fascinating-track-toys-1922-1978/"]
+  },
+  "Distler": {
+    "country": "Germany",
+    "startActivity": "1895",
+    "endActivity": "1962",
+    "history": "Johann Distler KG, founded in Nuremberg in 1895, started with inexpensive \"penny toys\" and grew into a major lithographed-tinplate manufacturer of cars, planes, trains and mechanical figures by the 1920s-30s. Postwar, became known for electric toy trains and a finely detailed electric Porsche 356 model (from 1955). German production ended in 1962.",
+    "sources": ["https://www.tcawestern.org/distler.htm"]
+  },
+  "HAJI": {
+    "country": "Japan",
+    "startActivity": "1951",
+    "history": "Trading as Mansei Toy Co., Ltd., a small Tokyo toy maker founded in 1951, focused mainly on tin wind-up vehicle toys, with no known production after the early 1960s.",
+    "sources": ["http://tinplatetoys.blogspot.com/2016/02/haji-mansei-toy-co-ltd.html"]
+  },
+  "Horikawa": {
+    "country": "Japan",
+    "history": "A Tokyo-based toy wholesaler/distributor rather than a direct manufacturer — most of its toys were produced by the Metal House company. One of the most prolific sellers of battery-operated tin robots, rockets and space toys in the 1960s-70s, closing in the late 1980s.",
+    "sources": ["https://www.fabtintoys.com/horikawa/"]
+  },
+  "Joustra": {
+    "country": "France",
+    "startActivity": "1934",
+    "history": "Jouets de Strasbourg, founded in 1934 by Guillaume Marx, known for tinplate cars, trains and airplanes, peaking in popularity during the 1950s-60s before shifting to plastic and Japanese imports. Sold to Compagnie Générale du Jouet in 1969, later acquired by Heller in 1999.",
+    "sources": [
+      "https://www.fabtintoys.com/joustra/",
+      "https://www.visit.alsace/en/232010220-joustra-exhibition-toys-made-in-alsace/"
+    ]
+  },
+  "Kellermann": {
+    "country": "Germany",
+    "startActivity": "1910",
+    "endActivity": "1979",
+    "history": "Georg Kellermann & Co. (trademark \"CKO\"), founded in Nuremberg in 1910, was known for lithographed tinplate wind-up toys — clockwork motorcycles, cars and novelty mechanical toys. Competitive production ceased by the late 1970s.",
+    "sources": ["https://www.binnsroad.co.uk/railways/cko/index.html"]
+  },
+  "Marusan": {
+    "country": "Japan",
+    "startActivity": "1947",
+    "history": "Marusan Shōten produced tinplate toys and celluloid dolls, famous for a detailed 1953 tin \"1951 Cadillac\" model that succeeded in the US market. Later became Japan's first plastic model manufacturer and known for PVC kaiju figures.",
+    "sources": ["https://en.wikipedia.org/wiki/Marusan_Sh%C5%8Dten"]
+  },
+  "Paya": {
+    "country": "Spain",
+    "startActivity": "1902",
+    "history": "Payá Hermanos, a pioneering Spanish tin toy manufacturer founded in Ibi, Alicante by tinsmith Rafael Payá, became Spain's leading toy maker by the 1920s-30s, helping establish Ibi as Spain's toy-making capital. The company declined through the 1990s.",
+    "sources": [
+      "https://www.tinplatetimes.com/Modern%20tinplate/BoothPaya/booth2.htm",
+      "https://www.atlasobscura.com/places/old-paya-toy-factory"
+    ]
+  },
+  "Tomiyama": {
+    "country": "Japan",
+    "startActivity": "1924",
+    "history": "Founded by Eiichirō Tomiyama, known for lithographed tinplate toys (planes, boats, cars) under the trademark \"E.T. Co.\" before incorporating as Tomy Company in 1953 and growing into the global Tomy/Takara Tomy brand, which remains active today.",
+    "sources": ["https://www.takaratomy.co.jp/english/company/csr/history2.html"]
+  },
+  "Unique Art": {
+    "country": "USA",
+    "startActivity": "1916",
+    "endActivity": "1952",
+    "history": "Unique Art Manufacturing Company, a Newark, New Jersey maker of lithographed tin wind-up novelty toys, including character toys like the Li'l Abner Dogpatch Band (1945) and a tin typewriter that competed with Marx.",
+    "sources": ["https://en.wikipedia.org/wiki/Unique_Art"]
+  },
+  "Yoshiya": {
+    "country": "Japan",
+    "history": "Kobe Yoko Ltd, a Kobe-based maker of wind-up and mechanical tin toys, robots and figures, including notable \"Robby the Robot\" toys based on the film Forbidden Planet. Trademark was \"KO\" or \"KOT\" in a diamond.",
+    "sources": ["https://www.carters.com.au/index.cfm/index/13364-yoshiya-kobe-yoko-ltd-japan-toys/"]
+  }
+}

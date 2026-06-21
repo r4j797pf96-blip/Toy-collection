@@ -67,6 +67,7 @@ export interface Manufacturer {
   history?: string;
   typesOfToys?: string;
   bibliography?: string;
+  sources?: string[];
 }
 
 export interface Stats {
