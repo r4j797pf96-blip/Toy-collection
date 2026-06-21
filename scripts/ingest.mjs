@@ -168,10 +168,11 @@ function ingestLivros(wb) {
 }
 
 const RESEARCH_FILE = path.join(ROOT, "data/research/manufacturers.json");
+const TRANSLATIONS_FILE = path.join(ROOT, "data/research/translations.json");
 
-function loadManufacturerResearch() {
-  if (!fs.existsSync(RESEARCH_FILE)) return {};
-  const raw = JSON.parse(fs.readFileSync(RESEARCH_FILE, "utf-8"));
+function loadByLowerTrademark(file) {
+  if (!fs.existsSync(file)) return new Map();
+  const raw = JSON.parse(fs.readFileSync(file, "utf-8"));
   delete raw._readme;
   const byLowerTrademark = new Map();
   for (const [trademark, entry] of Object.entries(raw)) {
@@ -184,13 +185,15 @@ function ingestFabricantes(wb) {
   const ws = wb.Sheets["fabricantes"];
   const rows = XLSX.utils.sheet_to_json(ws, { header: 1, defval: undefined });
   const [, ...data] = rows;
-  const research = loadManufacturerResearch();
+  const research = loadByLowerTrademark(RESEARCH_FILE);
+  const translations = loadByLowerTrademark(TRANSLATIONS_FILE);
 
   return data
     .filter((r) => r[1] !== undefined)
     .map((r, idx) => {
       const trademark = cell(r, 1);
       const extra = trademark ? research.get(trademark.toLowerCase()) : undefined;
+      const tr = trademark ? translations.get(trademark.toLowerCase()) : undefined;
 
       return {
         id: idx + 1,
@@ -198,13 +201,13 @@ function ingestFabricantes(wb) {
         logo: cell(r, 0),
         trademark,
         manufacturer: cell(r, 2),
-        address: cell(r, 3),
+        address: tr?.address ?? cell(r, 3),
         country: cell(r, 4) ?? extra?.country,
-        startActivity: cell(r, 5) ?? extra?.startActivity,
-        endActivity: cell(r, 6) ?? extra?.endActivity,
-        founder: cell(r, 7),
-        history: cell(r, 8) ?? extra?.history,
-        typesOfToys: cell(r, 9),
+        startActivity: tr?.startActivity ?? cell(r, 5) ?? extra?.startActivity,
+        endActivity: tr?.endActivity ?? cell(r, 6) ?? extra?.endActivity,
+        founder: tr?.founder ?? cell(r, 7),
+        history: tr?.history ?? cell(r, 8) ?? extra?.history,
+        typesOfToys: tr?.typesOfToys ?? cell(r, 9),
         bibliography: cell(r, 10),
         sources: extra?.sources,
       };

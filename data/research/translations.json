@@ -1,0 +1,32 @@
+{
+  "_readme": "English translations of manufacturer fields that are written in Portuguese/Spanish in the source spreadsheet, keyed by trademark (case-insensitive). Unlike manufacturers.json (which only fills in gaps), the fields present here REPLACE the spreadsheet's text at ingest time, since the spreadsheet values themselves need translating rather than completing.",
+  "Coelho de Sousa": {
+    "founder": "Coelho de Sousa",
+    "typesOfToys": "Coelho de Sousa (C.S.), founded in 1920, was primarily a trader: it designed toys and commissioned their manufacture, including lithographed buckets, trolleys and CP (Portuguese Railways) carriages."
+  },
+  "Congost": {
+    "address": "Originally at Calle Numancia 73, Barcelona, later moved to Prenafeta, near Montblanc (Tarragona).",
+    "startActivity": "1950s",
+    "founder": "Lluis Congost (b. 1913, d. 1990)",
+    "history": "Manufactured its own products and represented Mattel (from 1975), as well as Tomy and Revell (for 12 years). It also held Disney and Sesame Street licenses. During this period of expansion it opened a factory in France (Congost France, S.A.) and had representation in the USA and Germany. After the founder's death, it became an industrial plastics company (Congost Plastic, S.A.) based in Santa Eulàlia de Ronçana (Barcelona), later becoming Tecnitoys Juguetes SA (now defunct)."
+  },
+  "Grandarte": {
+    "history": "Operated during the 1960s under the management of Manuel Lopes, focusing on plastic goods production. In 1997 it merged with UPLA (Fábrica Universal de Plásticos), giving rise to Grandupla – Fábrica de Plásticos, S.A."
+  },
+  "JATO & PEPE": {
+    "address": "Alfena and Ermesinde",
+    "founder": "José Augusto Júnior (JAJ), a craftsman who began producing tinplate toys in 1921, including the well-known harmonicas and baby rattles.",
+    "history": "In 1930, José Augusto Júnior set up a new factory and was a pioneer in Portugal in manufacturing the first ribbon-wound clockwork toy. In 1946, \"JAJ\" relocated to Ermesinde for proximity to the railway, which it used to distribute toys across the country. The company was renamed \"A Industrial de Quinquilharias de Ermesinde\" and, in 1955, changed its name again to \"Fábrica de Artigos em Plástico JATO de José Augusto Júnior,\" adopting the acronym \"JATO.\" It was during this period that icons such as the Mercedes taxis, the VW \"bread van\" toys and miniature stoves appeared. After 1977, management passed to José Augusto Júnior's sons, who adopted the brand PEPE (or PE-PE), continuing the tradition to this day under the name Bruplast."
+  },
+  "MIC": {
+    "history": "Made motorized plastic vehicles and boats."
+  },
+  "Osul": {
+    "founder": "Brothers Manuel (1886–1954) and Artur Henriques (1892–1965)",
+    "history": "In the 1950s, one of the brothers left the company to found a new toy-making business, also in Espinho, giving rise to the \"Hércules\" brand. Around the same time, Luso-Celuloide adopted the name \"Osul\" (\"Luso\" spelled backwards) and continued manufacturing plastic toys.",
+    "typesOfToys": "With just eight employees, the factory initially produced celluloid jewelry, combs, buckles and religious articles. To make use of leftover material and fill slower production periods, the brothers began making small plastic toys. By the 1960s, Osul had expanded into die-cast metal manufacturing under the \"Metosul\" (or \"MetOsul\") brand, which became internationally recognized for its detailed 1/43 scale die-cast cars."
+  },
+  "Vispa Halcon": {
+    "history": "Vispa and Halcon existed separately before merging in the 1950s. Vispa made wind-up toys, many inspired by German makers (notably Technofix). Halcon made bicycles, tricycles, skateboards and air rifles."
+  }
+}

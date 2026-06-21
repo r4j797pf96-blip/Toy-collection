@@ -26,8 +26,6 @@ export default async function ManufacturerDetailPage({
     ["Address", manufacturer.address],
     ["Active", [manufacturer.startActivity, manufacturer.endActivity].filter(Boolean).join(" – ")],
     ["Founder", manufacturer.founder],
-    ["Types of toys made", manufacturer.typesOfToys],
-    ["Bibliography", manufacturer.bibliography],
   ];
 
   return (
@@ -46,11 +44,25 @@ export default async function ManufacturerDetailPage({
           .filter(([, v]) => v)
           .map(([k, v]) => (
             <div key={k} className="flex justify-between gap-4 py-2">
-              <dt className="text-muted">{k}</dt>
+              <dt className="text-muted shrink-0">{k}</dt>
               <dd className="text-right">{v}</dd>
             </div>
           ))}
       </dl>
+
+      {manufacturer.typesOfToys && (
+        <div className="mt-6 max-w-2xl">
+          <h2 className="text-xs uppercase tracking-wide text-muted mb-1">Types of toys made</h2>
+          <p className="text-sm leading-relaxed">{manufacturer.typesOfToys}</p>
+        </div>
+      )}
+
+      {manufacturer.bibliography && (
+        <div className="mt-4 max-w-2xl">
+          <h2 className="text-xs uppercase tracking-wide text-muted mb-1">Bibliography</h2>
+          <p className="text-sm leading-relaxed">{manufacturer.bibliography}</p>
+        </div>
+      )}
 
       {manufacturer.sources && manufacturer.sources.length > 0 && (
         <div className="mt-6 max-w-2xl">
