@@ -23,7 +23,11 @@ export default function ToyGallery({ name, photos }: { name: string; photos: str
             src={src}
             alt={`${name} photo ${i + 1}`}
             onClick={() => setOpenIndex(i)}
-            className={`w-full rounded-lg object-cover cursor-zoom-in ${i === 0 ? "col-span-2 aspect-[4/3]" : "aspect-square"}`}
+            className={
+              i === 0
+                ? "col-span-2 w-full h-auto rounded-lg cursor-zoom-in"
+                : "w-full aspect-square rounded-lg object-cover cursor-zoom-in"
+            }
           />
         ))}
       </div>
