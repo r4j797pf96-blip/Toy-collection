@@ -10,6 +10,7 @@ const ROOT = path.resolve(__dirname, "..");
 const SOURCE_FILE = path.join(ROOT, "data/source/collection.xlsx");
 const IMAGES_DIR = path.join(ROOT, "data/source/images");
 const OUT_DIR = path.join(ROOT, "src/data/generated");
+const PUBLIC_IMAGES_DIR = path.join(ROOT, "public/images/toys");
 
 function slugify(str) {
   return String(str)
@@ -40,12 +41,31 @@ function parsePairs(raw) {
   return out;
 }
 
+// Maps lowercased filename -> actual on-disk filename, since source images use
+// inconsistent extension casing (e.g. "PB190383.JPG") on a case-sensitive filesystem.
+let imageFilesByLowerName = null;
+function getImageFilesByLowerName() {
+  if (!imageFilesByLowerName) {
+    imageFilesByLowerName = new Map();
+    if (fs.existsSync(IMAGES_DIR)) {
+      for (const f of fs.readdirSync(IMAGES_DIR)) {
+        imageFilesByLowerName.set(f.toLowerCase(), f);
+      }
+    }
+  }
+  return imageFilesByLowerName;
+}
+
 function findImage(photoId) {
   if (!photoId) return null;
   const exts = [".jpg", ".jpeg", ".png", ".webp"];
+  const byLowerName = getImageFilesByLowerName();
   for (const ext of exts) {
-    const p = path.join(IMAGES_DIR, `${photoId}${ext}`);
-    if (fs.existsSync(p)) return `/images/toys/${photoId}${ext}`;
+    const actualName = byLowerName.get(`${photoId}${ext}`.toLowerCase());
+    if (!actualName) continue;
+    fs.mkdirSync(PUBLIC_IMAGES_DIR, { recursive: true });
+    fs.copyFileSync(path.join(IMAGES_DIR, actualName), path.join(PUBLIC_IMAGES_DIR, actualName));
+    return `/images/toys/${actualName}`;
   }
   return null;
 }
