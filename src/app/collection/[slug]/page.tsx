@@ -8,6 +8,7 @@ import {
   getToyBySlug,
 } from "@/lib/data";
 import ToyCard from "@/components/ToyCard";
+import ToyGallery from "@/components/ToyGallery";
 
 export function generateStaticParams() {
   return getAllToys().map((t) => ({ slug: t.slug }));
@@ -45,23 +46,7 @@ export default async function ToyDetailPage({
       </Link>
 
       <div className="mt-6 grid sm:grid-cols-2 gap-10">
-        <div className="grid grid-cols-2 gap-3">
-          {toy.photos.length > 0 ? (
-            toy.photos.map((src, i) => (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img
-                key={src}
-                src={src}
-                alt={`${toy.name} photo ${i + 1}`}
-                className={`w-full rounded-lg object-cover ${i === 0 ? "col-span-2 aspect-[4/3]" : "aspect-square"}`}
-              />
-            ))
-          ) : (
-            <div className="col-span-2 aspect-[4/3] rounded-lg bg-border/40 flex items-center justify-center text-muted text-sm">
-              No photo available
-            </div>
-          )}
-        </div>
+        <ToyGallery name={toy.name} photos={toy.photos} />
 
         <div>
           <h1 className="font-serif text-3xl leading-tight">{toy.name}</h1>

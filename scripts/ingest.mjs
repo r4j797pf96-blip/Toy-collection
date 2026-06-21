@@ -29,6 +29,33 @@ function cell(row, i) {
   return s === "" ? undefined : s;
 }
 
+const LOWERCASE_WORDS = new Set(["and", "or", "the", "of", "a", "an", "in", "on", "for", "to"]);
+
+// Cleans up category labels from the spreadsheet: fixes missing spaces around
+// "/" and "&", and applies consistent title case (small connector words stay
+// lowercase unless they open the label).
+function normalizeLabel(str) {
+  if (!str) return str;
+  const spaced = str
+    .replace(/\s*\/\s*/g, " / ")
+    .replace(/\s*&\s*/g, " & ")
+    .replace(/\s+/g, " ")
+    .trim();
+
+  return spaced
+    .split(" ")
+    .map((word, i) => {
+      if (word === "/" || word === "&") return word;
+      if (i > 0 && LOWERCASE_WORDS.has(word.toLowerCase())) return word.toLowerCase();
+      if (/^[A-Z0-9]+$/.test(word)) return word; // keep acronyms as-is
+      return word
+        .split("-")
+        .map((part) => part.charAt(0).toUpperCase() + part.slice(1).toLowerCase())
+        .join("-");
+    })
+    .join(" ");
+}
+
 // Parses fragments like "17 (49) 35 (162)" into [{ refId: 17, note: "49" }, ...]
 function parsePairs(raw) {
   if (!raw) return [];
@@ -87,15 +114,15 @@ function ingestBrinquedos(wb) {
         slug: `${id}-${slugify(name)}`,
         name,
         model: cell(r, 2),
-        type: cell(r, 3),
-        topic: cell(r, 4),
+        type: normalizeLabel(cell(r, 3)),
+        topic: normalizeLabel(cell(r, 4)),
         description: cell(r, 5),
-        mechanism: cell(r, 6),
+        mechanism: normalizeLabel(cell(r, 6)),
         movementDescription: cell(r, 7),
         materials: cell(r, 8),
         dimensions: cell(r, 9),
         trademark: cell(r, 10),
-        condition: cell(r, 11),
+        condition: normalizeLabel(cell(r, 11)),
         firstYear: cell(r, 12),
         lastYear: cell(r, 13),
         boxDescription: cell(r, 14),

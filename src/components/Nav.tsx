@@ -13,7 +13,7 @@ export default function Nav() {
     <header className="border-b border-border bg-background/95 backdrop-blur sticky top-0 z-50">
       <div className="mx-auto max-w-6xl px-4 sm:px-6 h-16 flex items-center justify-between">
         <Link href="/" className="font-serif text-lg tracking-tight">
-          The Toy Archive
+          The Mechanical Toy Archive
         </Link>
         <nav className="flex items-center gap-5 text-sm overflow-x-auto">
           {links.map((l) => (

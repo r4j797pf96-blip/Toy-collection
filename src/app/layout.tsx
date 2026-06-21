@@ -16,7 +16,7 @@ const body = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "The Toy Archive",
+  title: "The Mechanical Toy Archive",
   description: "A catalogued collection of antique tin and battery-operated toys.",
 };
 

@@ -1,4 +1,4 @@
-# The Toy Archive
+# The Mechanical Toy Archive
 
 A catalogue website for an antique tin and battery-toy collection. Built with Next.js (App Router) + TypeScript + Tailwind.
 
