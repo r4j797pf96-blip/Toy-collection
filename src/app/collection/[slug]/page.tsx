@@ -30,6 +30,7 @@ export default async function ToyDetailPage({
     ["Model", toy.model],
     ["Type", toy.type],
     ["Topic", toy.topic],
+    ["Country of manufacture", manufacturer?.country],
     ["Mechanism", toy.mechanism],
     ["Movement", toy.movementDescription],
     ["Materials", toy.materials],
