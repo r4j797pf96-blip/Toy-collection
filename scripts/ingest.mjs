@@ -1,0 +1,192 @@
+// Reads data/source/collection.xlsx and writes structured JSON to src/data/generated.
+// Re-run with `npm run ingest` whenever the spreadsheet or image folder is updated.
+import XLSX from "xlsx";
+import { fileURLToPath } from "url";
+import path from "path";
+import fs from "fs";
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const ROOT = path.resolve(__dirname, "..");
+const SOURCE_FILE = path.join(ROOT, "data/source/collection.xlsx");
+const IMAGES_DIR = path.join(ROOT, "data/source/images");
+const OUT_DIR = path.join(ROOT, "src/data/generated");
+
+function slugify(str) {
+  return String(str)
+    .toLowerCase()
+    .normalize("NFKD")
+    .replace(/[̀-ͯ]/g, "")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "")
+    .slice(0, 80);
+}
+
+function cell(row, i) {
+  const v = row[i];
+  if (v === undefined || v === null) return undefined;
+  const s = String(v).trim();
+  return s === "" ? undefined : s;
+}
+
+// Parses fragments like "17 (49) 35 (162)" into [{ refId: 17, note: "49" }, ...]
+function parsePairs(raw) {
+  if (!raw) return [];
+  const out = [];
+  const re = /(\d+)\s*\(([^)]*)\)/g;
+  let m;
+  while ((m = re.exec(raw))) {
+    out.push({ refId: Number(m[1]), note: m[2].trim() });
+  }
+  return out;
+}
+
+function findImage(photoId) {
+  if (!photoId) return null;
+  const exts = [".jpg", ".jpeg", ".png", ".webp"];
+  for (const ext of exts) {
+    const p = path.join(IMAGES_DIR, `${photoId}${ext}`);
+    if (fs.existsSync(p)) return `/images/toys/${photoId}${ext}`;
+  }
+  return null;
+}
+
+function ingestBrinquedos(wb) {
+  const ws = wb.Sheets["brinquedos"];
+  const rows = XLSX.utils.sheet_to_json(ws, { header: 1, defval: undefined });
+  const [, ...data] = rows;
+
+  return data
+    .filter((r) => r[0] !== undefined && r[1] !== undefined)
+    .map((r) => {
+      const id = Number(r[0]);
+      const name = cell(r, 1);
+      const photoIds = [cell(r, 22), cell(r, 23), cell(r, 24), cell(r, 25)].filter(Boolean);
+
+      return {
+        id,
+        slug: `${id}-${slugify(name)}`,
+        name,
+        model: cell(r, 2),
+        type: cell(r, 3),
+        topic: cell(r, 4),
+        description: cell(r, 5),
+        mechanism: cell(r, 6),
+        movementDescription: cell(r, 7),
+        materials: cell(r, 8),
+        dimensions: cell(r, 9),
+        trademark: cell(r, 10),
+        condition: cell(r, 11),
+        firstYear: cell(r, 12),
+        lastYear: cell(r, 13),
+        boxDescription: cell(r, 14),
+        bookRefs: parsePairs(cell(r, 19)).map((p) => ({ bookId: p.refId, pages: p.note })),
+        research: cell(r, 20),
+        notes: cell(r, 21),
+        photoIds,
+        photos: photoIds.map(findImage).filter(Boolean),
+        // Private fields: stats-only, never rendered on public pages.
+        private: {
+          cost: cell(r, 15),
+          purchaseDate: cell(r, 16),
+          purchaseSource: cell(r, 17),
+          valueRaw: cell(r, 18),
+          valueEntries: parsePairs(cell(r, 18)).map((p) => ({ amount: p.refId, note: p.note })),
+        },
+      };
+    });
+}
+
+function ingestLivros(wb) {
+  const ws = wb.Sheets["livros"];
+  const rows = XLSX.utils.sheet_to_json(ws, { header: 1, defval: undefined });
+  const [, ...data] = rows;
+
+  return data
+    .filter((r) => r[0] !== undefined && r[1] !== undefined)
+    .map((r) => {
+      const id = Number(r[0]);
+      const title = cell(r, 1);
+      return {
+        id,
+        slug: `${id}-${slugify(title)}`,
+        title,
+        authors: cell(r, 2),
+        year: cell(r, 3),
+        publisher: cell(r, 4),
+        location: cell(r, 5),
+        pagesWithOurToys: cell(r, 6),
+        notes: cell(r, 7),
+      };
+    });
+}
+
+function ingestFabricantes(wb) {
+  const ws = wb.Sheets["fabricantes"];
+  const rows = XLSX.utils.sheet_to_json(ws, { header: 1, defval: undefined });
+  const [, ...data] = rows;
+
+  return data
+    .filter((r) => r[1] !== undefined)
+    .map((r, idx) => {
+      const trademark = cell(r, 1);
+      return {
+        id: idx + 1,
+        slug: slugify(trademark),
+        logo: cell(r, 0),
+        trademark,
+        manufacturer: cell(r, 2),
+        address: cell(r, 3),
+        country: cell(r, 4),
+        startActivity: cell(r, 5),
+        endActivity: cell(r, 6),
+        founder: cell(r, 7),
+        history: cell(r, 8),
+        typesOfToys: cell(r, 9),
+        bibliography: cell(r, 10),
+      };
+    });
+}
+
+function main() {
+  if (!fs.existsSync(SOURCE_FILE)) {
+    console.error(`Missing spreadsheet at ${SOURCE_FILE}`);
+    process.exit(1);
+  }
+  fs.mkdirSync(OUT_DIR, { recursive: true });
+
+  const wb = XLSX.readFile(SOURCE_FILE);
+  const toys = ingestBrinquedos(wb);
+  const books = ingestLivros(wb);
+  const manufacturers = ingestFabricantes(wb);
+
+  const stats = {
+    totalToys: toys.length,
+    totalBooks: books.length,
+    totalManufacturers: manufacturers.length,
+    byType: countBy(toys, "type"),
+    byTopic: countBy(toys, "topic"),
+    byMechanism: countBy(toys, "mechanism"),
+    byCondition: countBy(toys, "condition"),
+    byTrademark: countBy(toys, "trademark"),
+  };
+
+  fs.writeFileSync(path.join(OUT_DIR, "toys.json"), JSON.stringify(toys, null, 2));
+  fs.writeFileSync(path.join(OUT_DIR, "books.json"), JSON.stringify(books, null, 2));
+  fs.writeFileSync(path.join(OUT_DIR, "manufacturers.json"), JSON.stringify(manufacturers, null, 2));
+  fs.writeFileSync(path.join(OUT_DIR, "stats.json"), JSON.stringify(stats, null, 2));
+
+  console.log(
+    `Ingested ${toys.length} toys, ${books.length} books, ${manufacturers.length} manufacturers.`
+  );
+}
+
+function countBy(arr, key) {
+  const out = {};
+  for (const item of arr) {
+    const v = item[key] || "Unspecified";
+    out[v] = (out[v] || 0) + 1;
+  }
+  return out;
+}
+
+main();
