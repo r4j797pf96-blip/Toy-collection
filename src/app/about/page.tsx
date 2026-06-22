@@ -30,15 +30,31 @@ export default function AboutPage() {
           and antique fair at a time.
         </p>
         <p>
-          He&rsquo;s a Full Professor of Polymer Engineering at the
-          University of Minho, where he&rsquo;s spent his career studying the
-          materials that, fittingly, make up half the toys on these shelves.
-          It&rsquo;s a fun bit of overlap: decades of research into plastics
-          and polymers, and decades of collecting the toys made from them.
+          His training is in Mechanical Engineering, and it shows in what
+          draws him to these pieces: the resourcefulness and creativity of
+          squeezing such complex, memorable movements out of such simple
+          engines has always fascinated him. He&rsquo;s also a Full Professor
+          of Polymer Engineering at the University of Minho, where he&rsquo;s
+          spent his career studying the very materials that, fittingly, make
+          up half the toys on these shelves. It&rsquo;s a fun bit of overlap:
+          decades of research into plastics and polymers, and decades of
+          collecting the toys made from them.
+        </p>
+        <p>
+          This has always been a family affair. Treasure hunts at flea
+          markets and fairs became a shared pastime, with a few pieces added
+          to the collection by other hands, and a couple of side-collections
+          of our own along the way — our mother, in particular, has been a
+          constant and willing partner in crime.
         </p>
         <p>
           This website exists so the collection can be shared a little more
-          widely than the shelves at home allow.
+          widely. Questions, stories about a toy you recognize, or leads on a
+          missing piece are always welcome — reach out at{" "}
+          <a href="mailto:jacgcovas@gmail.com" className="text-accent hover:underline">
+            jacgcovas@gmail.com
+          </a>
+          .
         </p>
       </div>
     </div>
