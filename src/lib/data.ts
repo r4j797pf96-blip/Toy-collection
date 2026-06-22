@@ -63,6 +63,37 @@ export function filterToys(filters: ToyFilters): Toy[] {
   });
 }
 
+export const TOY_SORT_OPTIONS = [
+  { value: "name-asc", label: "Name (A–Z)" },
+  { value: "name-desc", label: "Name (Z–A)" },
+  { value: "year-asc", label: "Year (Oldest first)" },
+  { value: "year-desc", label: "Year (Newest first)" },
+  { value: "trademark-asc", label: "Manufacturer (A–Z)" },
+] as const;
+
+export type ToySort = (typeof TOY_SORT_OPTIONS)[number]["value"];
+
+export function sortToys(list: Toy[], sort?: string): Toy[] {
+  const sorted = [...list];
+  const year = (t: Toy) => Number(t.firstYear) || undefined;
+
+  switch (sort) {
+    case "name-desc":
+      return sorted.sort((a, b) => b.name.localeCompare(a.name));
+    case "year-asc":
+      return sorted.sort((a, b) => (year(a) ?? Infinity) - (year(b) ?? Infinity));
+    case "year-desc":
+      return sorted.sort((a, b) => (year(b) ?? -Infinity) - (year(a) ?? -Infinity));
+    case "trademark-asc":
+      return sorted.sort(
+        (a, b) => (a.trademark ?? "").localeCompare(b.trademark ?? "") || a.name.localeCompare(b.name)
+      );
+    case "name-asc":
+    default:
+      return sorted.sort((a, b) => a.name.localeCompare(b.name));
+  }
+}
+
 export function getAllBooks(): Book[] {
   return books;
 }
