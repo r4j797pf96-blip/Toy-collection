@@ -1,6 +1,7 @@
 import { filterToys, getFilterOptions, sortToys, TOY_SORT_OPTIONS } from "@/lib/data";
 import ToyCard from "@/components/ToyCard";
 import Pagination from "@/components/Pagination";
+import HideOnScroll from "@/components/HideOnScroll";
 
 const PAGE_SIZE = 24;
 
@@ -61,60 +62,62 @@ export default async function CollectionPage({
     <div className="mx-auto max-w-6xl px-4 sm:px-6 py-12">
       <h1 className="font-serif text-3xl mb-6">Collection</h1>
 
-      <form
-        className="sticky top-0 z-10 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80 pt-2 pb-4 -mx-4 px-4 sm:-mx-6 sm:px-6 border-b border-border grid grid-cols-2 sm:grid-cols-6 gap-3 mb-8 items-end"
-        method="get"
-      >
-        <label className="text-sm flex flex-col gap-1 col-span-2 sm:col-span-1">
-          <span className="text-muted text-xs uppercase tracking-wide">Search</span>
-          <input
-            type="text"
-            name="q"
-            defaultValue={filters.q ?? ""}
-            placeholder="Name, description..."
-            className="border border-border rounded-md px-2 py-1.5 bg-card"
+      <HideOnScroll>
+        <form
+          className="bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80 pt-2 pb-4 -mx-4 px-4 sm:-mx-6 sm:px-6 border-b border-border grid grid-cols-2 sm:grid-cols-6 gap-3 mb-8 items-end"
+          method="get"
+        >
+          <label className="text-sm flex flex-col gap-1 col-span-2 sm:col-span-1">
+            <span className="text-muted text-xs uppercase tracking-wide">Search</span>
+            <input
+              type="text"
+              name="q"
+              defaultValue={filters.q ?? ""}
+              placeholder="Name, description..."
+              className="border border-border rounded-md px-2 py-1.5 bg-card"
+            />
+          </label>
+          <Select name="type" label="Type" value={filters.type} options={options.types} />
+          <Select name="topic" label="Topic" value={filters.topic} options={options.topics} />
+          <Select
+            name="mechanism"
+            label="Mechanism"
+            value={filters.mechanism}
+            options={options.mechanisms}
           />
-        </label>
-        <Select name="type" label="Type" value={filters.type} options={options.types} />
-        <Select name="topic" label="Topic" value={filters.topic} options={options.topics} />
-        <Select
-          name="mechanism"
-          label="Mechanism"
-          value={filters.mechanism}
-          options={options.mechanisms}
-        />
-        <Select
-          name="trademark"
-          label="Manufacturer"
-          value={filters.trademark}
-          options={options.trademarks}
-        />
-        <label className="text-sm flex flex-col gap-1">
-          <span className="text-muted text-xs uppercase tracking-wide">Sort by</span>
-          <select
-            name="sort"
-            defaultValue={sort ?? "name-asc"}
-            className="border border-border rounded-md px-2 py-1.5 bg-card"
-          >
-            {TOY_SORT_OPTIONS.map((o) => (
-              <option key={o.value} value={o.value}>
-                {o.label}
-              </option>
-            ))}
-          </select>
-        </label>
-        <div className="col-span-2 sm:col-span-6 flex gap-3">
-          <button
-            type="submit"
-            className="bg-foreground text-background px-4 py-2 rounded-full text-sm"
-          >
-            Apply filters
-          </button>
-          <a href="/collection" className="text-sm text-muted self-center">
-            Clear
-          </a>
-        </div>
-      </form>
+          <Select
+            name="trademark"
+            label="Manufacturer"
+            value={filters.trademark}
+            options={options.trademarks}
+          />
+          <label className="text-sm flex flex-col gap-1">
+            <span className="text-muted text-xs uppercase tracking-wide">Sort by</span>
+            <select
+              name="sort"
+              defaultValue={sort ?? "name-asc"}
+              className="border border-border rounded-md px-2 py-1.5 bg-card"
+            >
+              {TOY_SORT_OPTIONS.map((o) => (
+                <option key={o.value} value={o.value}>
+                  {o.label}
+                </option>
+              ))}
+            </select>
+          </label>
+          <div className="col-span-2 sm:col-span-6 flex gap-3">
+            <button
+              type="submit"
+              className="bg-foreground text-background px-4 py-2 rounded-full text-sm"
+            >
+              Apply filters
+            </button>
+            <a href="/collection" className="text-sm text-muted self-center">
+              Clear
+            </a>
+          </div>
+        </form>
+      </HideOnScroll>
 
       <p className="text-sm text-muted mb-4">
         {filtered.length} toys
