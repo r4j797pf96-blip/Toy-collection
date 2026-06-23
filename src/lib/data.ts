@@ -153,3 +153,92 @@ export function getValueStats() {
 
   return { totalLatestValue, totalCostKnown, toysWithValue, toysWithCost };
 }
+
+function parseDimensions(dimensions?: string): [number, number, number] | undefined {
+  if (!dimensions) return undefined;
+  const parts = dimensions
+    .trim()
+    .split(/x/i)
+    .map((p) => Number(p.replace(",", ".")));
+  if (parts.length !== 3 || parts.some((p) => Number.isNaN(p) || p <= 0)) return undefined;
+  return parts as [number, number, number];
+}
+
+export interface ToySize {
+  toy: Toy;
+  volume: number;
+}
+
+export function getCollectionInsights() {
+  const byDecade: Record<string, number> = {};
+  const byCountry: Record<string, number> = {};
+  const costByType: Record<string, number> = {};
+  const costByTrademark: Record<string, number> = {};
+  const sizes: ToySize[] = [];
+
+  let toysWithPhoto = 0;
+  const toysMissingPhoto: Toy[] = [];
+  const toysMissingCost: Toy[] = [];
+  const toysMissingManufacturer: Toy[] = [];
+
+  for (const toy of toys) {
+    const year = Number(toy.firstYear);
+    if (!Number.isNaN(year) && year > 0) {
+      const decade = `${Math.floor(year / 10) * 10}s`;
+      byDecade[decade] = (byDecade[decade] ?? 0) + 1;
+    }
+
+    const manufacturer = getManufacturerByTrademark(toy.trademark);
+    if (manufacturer?.country) {
+      byCountry[manufacturer.country] = (byCountry[manufacturer.country] ?? 0) + 1;
+    }
+
+    const cost = Number(toy.private.cost);
+    if (!Number.isNaN(cost) && cost > 0) {
+      if (toy.type) costByType[toy.type] = (costByType[toy.type] ?? 0) + cost;
+      if (toy.trademark) costByTrademark[toy.trademark] = (costByTrademark[toy.trademark] ?? 0) + cost;
+    } else {
+      toysMissingCost.push(toy);
+    }
+
+    const dims = parseDimensions(toy.dimensions);
+    if (dims) sizes.push({ toy, volume: dims[0] * dims[1] * dims[2] });
+
+    if (toy.photos.length > 0) {
+      toysWithPhoto += 1;
+    } else {
+      toysMissingPhoto.push(toy);
+    }
+
+    if (!manufacturer) toysMissingManufacturer.push(toy);
+  }
+
+  const costs = toys
+    .map((t) => Number(t.private.cost))
+    .filter((c) => !Number.isNaN(c) && c > 0)
+    .sort((a, b) => a - b);
+  const medianCost = costs.length
+    ? costs.length % 2 === 1
+      ? costs[(costs.length - 1) / 2]
+      : (costs[costs.length / 2 - 1] + costs[costs.length / 2]) / 2
+    : 0;
+  const avgCost = costs.length ? costs.reduce((a, b) => a + b, 0) / costs.length : 0;
+
+  sizes.sort((a, b) => b.volume - a.volume);
+
+  return {
+    byDecade,
+    byCountry,
+    costByType,
+    costByTrademark,
+    avgCost,
+    medianCost,
+    largestToys: sizes.slice(0, 5),
+    smallestToys: sizes.slice(-5).reverse(),
+    photoCoveragePct: toys.length ? Math.round((toysWithPhoto / toys.length) * 100) : 0,
+    toysMissingPhoto,
+    toysMissingCost,
+    toysMissingManufacturer,
+    recentlyAdded: [...toys].sort((a, b) => b.id - a.id).slice(0, 8),
+  };
+}

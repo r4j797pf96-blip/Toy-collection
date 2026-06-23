@@ -1,6 +1,15 @@
-import { getStats, getValueStats } from "@/lib/data";
+import Link from "next/link";
+import { getCollectionInsights, getStats, getValueStats } from "@/lib/data";
 
-function BarList({ data, max = 8 }: { data: Record<string, number>; max?: number }) {
+function BarList({
+  data,
+  max = 8,
+  format,
+}: {
+  data: Record<string, number>;
+  max?: number;
+  format?: (v: number) => string;
+}) {
   const entries = Object.entries(data)
     .sort((a, b) => b[1] - a[1])
     .slice(0, max);
@@ -12,7 +21,7 @@ function BarList({ data, max = 8 }: { data: Record<string, number>; max?: number
         <li key={label} className="text-sm">
           <div className="flex justify-between mb-1">
             <span>{label}</span>
-            <span className="text-muted">{value}</span>
+            <span className="text-muted">{format ? format(value) : value}</span>
           </div>
           <div className="h-1.5 rounded-full bg-border">
             <div
@@ -29,6 +38,8 @@ function BarList({ data, max = 8 }: { data: Record<string, number>; max?: number
 export default function StatsPage() {
   const stats = getStats();
   const value = getValueStats();
+  const insights = getCollectionInsights();
+  const euro = (v: number) => `€${Math.round(v).toLocaleString()}`;
 
   return (
     <div className="mx-auto max-w-6xl px-4 sm:px-6 py-12">
@@ -91,6 +102,123 @@ export default function StatsPage() {
         <div>
           <h2 className="font-serif text-xl mb-4">Top manufacturers</h2>
           <BarList data={stats.byTrademark} />
+        </div>
+        <div>
+          <h2 className="font-serif text-xl mb-4">By decade of manufacture</h2>
+          <BarList data={insights.byDecade} />
+        </div>
+        <div>
+          <h2 className="font-serif text-xl mb-4">By country of origin</h2>
+          <BarList data={insights.byCountry} />
+        </div>
+        <div>
+          <h2 className="font-serif text-xl mb-4">Acquisition cost by type</h2>
+          <BarList data={insights.costByType} format={euro} />
+        </div>
+        <div>
+          <h2 className="font-serif text-xl mb-4">Acquisition cost by manufacturer</h2>
+          <BarList data={insights.costByTrademark} format={euro} />
+        </div>
+      </div>
+
+      <div className="grid sm:grid-cols-3 gap-4 my-12">
+        <div className="border border-border rounded-lg p-5 bg-card">
+          <p className="text-2xl font-serif">{euro(insights.avgCost)}</p>
+          <p className="text-sm text-muted">Average acquisition cost</p>
+        </div>
+        <div className="border border-border rounded-lg p-5 bg-card">
+          <p className="text-2xl font-serif">{euro(insights.medianCost)}</p>
+          <p className="text-sm text-muted">Median acquisition cost</p>
+        </div>
+        <div className="border border-border rounded-lg p-5 bg-card">
+          <p className="text-2xl font-serif">{insights.photoCoveragePct}%</p>
+          <p className="text-sm text-muted">Toys with at least one photo</p>
+        </div>
+      </div>
+
+      <div className="grid sm:grid-cols-2 gap-10 mb-12">
+        <div>
+          <h2 className="font-serif text-xl mb-4">Largest pieces</h2>
+          <ul className="space-y-1 text-sm">
+            {insights.largestToys.map(({ toy }) => (
+              <li key={toy.id} className="flex justify-between gap-4">
+                <Link href={`/collection/${toy.slug}`} className="hover:underline">
+                  {toy.name}
+                </Link>
+                <span className="text-muted shrink-0">{toy.dimensions} cm</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+        <div>
+          <h2 className="font-serif text-xl mb-4">Smallest pieces</h2>
+          <ul className="space-y-1 text-sm">
+            {insights.smallestToys.map(({ toy }) => (
+              <li key={toy.id} className="flex justify-between gap-4">
+                <Link href={`/collection/${toy.slug}`} className="hover:underline">
+                  {toy.name}
+                </Link>
+                <span className="text-muted shrink-0">{toy.dimensions} cm</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+
+      <div className="mb-12">
+        <h2 className="font-serif text-xl mb-4">Recently added to the catalogue</h2>
+        <ul className="grid sm:grid-cols-2 gap-1 text-sm">
+          {insights.recentlyAdded.map((toy) => (
+            <li key={toy.id}>
+              <Link href={`/collection/${toy.slug}`} className="hover:underline">
+                {toy.name}
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <div>
+        <h2 className="font-serif text-xl mb-4">Cataloguing health</h2>
+        <div className="grid sm:grid-cols-3 gap-4 text-sm">
+          <div className="border border-border rounded-lg p-4 bg-card">
+            <p className="font-medium mb-1">{insights.toysMissingPhoto.length} missing photos</p>
+            <ul className="space-y-0.5 text-muted">
+              {insights.toysMissingPhoto.slice(0, 5).map((t) => (
+                <li key={t.id}>
+                  <Link href={`/collection/${t.slug}`} className="hover:underline">
+                    {t.name}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+          <div className="border border-border rounded-lg p-4 bg-card">
+            <p className="font-medium mb-1">{insights.toysMissingCost.length} missing cost</p>
+            <ul className="space-y-0.5 text-muted">
+              {insights.toysMissingCost.slice(0, 5).map((t) => (
+                <li key={t.id}>
+                  <Link href={`/collection/${t.slug}`} className="hover:underline">
+                    {t.name}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+          <div className="border border-border rounded-lg p-4 bg-card">
+            <p className="font-medium mb-1">
+              {insights.toysMissingManufacturer.length} missing manufacturer match
+            </p>
+            <ul className="space-y-0.5 text-muted">
+              {insights.toysMissingManufacturer.slice(0, 5).map((t) => (
+                <li key={t.id}>
+                  <Link href={`/collection/${t.slug}`} className="hover:underline">
+                    {t.name}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
         </div>
       </div>
     </div>
