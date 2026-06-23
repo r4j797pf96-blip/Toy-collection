@@ -61,7 +61,6 @@ const COUNTRY_DEMONYMS: Record<string, string[]> = {
   India: ["indian"],
   Italy: ["italian"],
   Japan: ["japanese"],
-  Portgal: ["portuguese", "portugal"],
   Portugal: ["portuguese"],
   "South Korea": ["korean"],
   Spain: ["spanish"],
