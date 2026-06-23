@@ -12,10 +12,10 @@ export async function POST(req: NextRequest) {
     url.pathname = "/stats/login";
     url.searchParams.set("error", "1");
     url.searchParams.set("next", next);
-    return NextResponse.redirect(url);
+    return NextResponse.redirect(url, 303);
   }
 
-  const res = NextResponse.redirect(new URL(next, req.url));
+  const res = NextResponse.redirect(new URL(next, req.url), 303);
   res.cookies.set("stats_auth", expected, {
     httpOnly: true,
     sameSite: "lax",

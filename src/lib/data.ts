@@ -136,6 +136,7 @@ export function getValueStats() {
   let totalLatestValue = 0;
   let totalCostKnown = 0;
   let toysWithValue = 0;
+  let toysWithCost = 0;
 
   for (const toy of toys) {
     const entries = toy.private.valueEntries;
@@ -144,8 +145,11 @@ export function getValueStats() {
       toysWithValue += 1;
     }
     const cost = Number(toy.private.cost);
-    if (!Number.isNaN(cost) && cost > 0) totalCostKnown += cost;
+    if (!Number.isNaN(cost) && cost > 0) {
+      totalCostKnown += cost;
+      toysWithCost += 1;
+    }
   }
 
-  return { totalLatestValue, totalCostKnown, toysWithValue };
+  return { totalLatestValue, totalCostKnown, toysWithValue, toysWithCost };
 }

@@ -53,7 +53,9 @@ export default function StatsPage() {
       <div className="grid sm:grid-cols-3 gap-4 mb-12">
         <div className="border border-border rounded-lg p-5 bg-card">
           <p className="text-2xl font-serif">€{value.totalCostKnown.toLocaleString()}</p>
-          <p className="text-sm text-muted">Total recorded acquisition cost</p>
+          <p className="text-sm text-muted">
+            Total recorded acquisition cost ({value.toysWithCost} toys)
+          </p>
         </div>
         <div className="border border-border rounded-lg p-5 bg-card">
           <p className="text-2xl font-serif">€{value.totalLatestValue.toLocaleString()}</p>
