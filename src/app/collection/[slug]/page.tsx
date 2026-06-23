@@ -7,6 +7,7 @@ import {
   getRelatedToys,
   getToyBySlug,
 } from "@/lib/data";
+import BackToCollection from "@/components/BackToCollection";
 import ToyCard from "@/components/ToyCard";
 import ToyGallery from "@/components/ToyGallery";
 
@@ -42,9 +43,7 @@ export default async function ToyDetailPage({
 
   return (
     <div className="mx-auto max-w-6xl px-4 sm:px-6 py-12">
-      <Link href="/collection" className="text-sm text-muted hover:text-foreground">
-        ← Back to Collection
-      </Link>
+      <BackToCollection />
 
       <div className="mt-6 grid sm:grid-cols-2 gap-10">
         <ToyGallery name={toy.name} photos={toy.photos} />
