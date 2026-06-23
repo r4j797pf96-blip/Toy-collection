@@ -5,19 +5,22 @@ function BarList({
   data,
   max = 8,
   format,
+  sort = "value",
 }: {
   data: Record<string, number>;
   max?: number;
   format?: (v: number) => string;
+  sort?: "value" | "label";
 }) {
-  const entries = Object.entries(data)
-    .sort((a, b) => b[1] - a[1])
-    .slice(0, max);
-  const top = entries[0]?.[1] ?? 1;
+  const entries = Object.entries(data).sort((a, b) =>
+    sort === "label" ? a[0].localeCompare(b[0], undefined, { numeric: true }) : b[1] - a[1]
+  );
+  const limited = sort === "label" ? entries : entries.slice(0, max);
+  const top = Math.max(...entries.map(([, v]) => v), 1);
 
   return (
     <ul className="space-y-2">
-      {entries.map(([label, value]) => (
+      {limited.map(([label, value]) => (
         <li key={label} className="text-sm">
           <div className="flex justify-between mb-1">
             <span>{label}</span>
@@ -105,7 +108,7 @@ export default function StatsPage() {
         </div>
         <div>
           <h2 className="font-serif text-xl mb-4">By decade of manufacture</h2>
-          <BarList data={insights.byDecade} />
+          <BarList data={insights.byDecade} sort="label" />
         </div>
         <div>
           <h2 className="font-serif text-xl mb-4">By country of origin</h2>
