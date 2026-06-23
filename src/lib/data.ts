@@ -48,6 +48,73 @@ export interface ToyFilters {
   trademark?: string;
 }
 
+const COUNTRY_DEMONYMS: Record<string, string[]> = {
+  Argentina: ["argentine", "argentinian"],
+  China: ["chinese"],
+  "Czech Republic": ["czech"],
+  England: ["english"],
+  France: ["french"],
+  Germany: ["german"],
+  "West Germany": ["german"],
+  "Hong Kong": ["hong kong"],
+  Hungary: ["hungarian"],
+  India: ["indian"],
+  Italy: ["italian"],
+  Japan: ["japanese"],
+  Portgal: ["portuguese", "portugal"],
+  Portugal: ["portuguese"],
+  "South Korea": ["korean"],
+  Spain: ["spanish"],
+  Taiwan: ["taiwanese"],
+  "U.K.": ["british", "english", "uk"],
+  UK: ["british", "english"],
+  "U.S.A.": ["american", "usa", "us"],
+  USA: ["american", "us"],
+  URSS: ["soviet", "russian", "ussr"],
+};
+
+function countryMatches(country: string | undefined, q: string): boolean {
+  if (!country) return false;
+  if (country.toLowerCase().includes(q)) return true;
+  const demonyms = COUNTRY_DEMONYMS[country] ?? [];
+  return demonyms.some((d) => d.includes(q) || q.includes(d));
+}
+
+function decadeRangeForQuery(q: string): [number, number] | undefined {
+  const fourDigit = q.match(/^(\d{4})s$/);
+  if (fourDigit) {
+    const start = Number(fourDigit[1]);
+    return [start, start + 9];
+  }
+  const twoDigit = q.match(/^(\d{2})s$/);
+  if (twoDigit) {
+    return [Number(twoDigit[1]), Number(twoDigit[1])];
+  }
+  return undefined;
+}
+
+function toyMatchesYear(toy: Toy, year: number): boolean {
+  const first = Number(toy.firstYear);
+  const last = Number(toy.lastYear) || first;
+  if (Number.isNaN(first)) return false;
+  return year >= first && year <= last;
+}
+
+function toyMatchesDecadeQuery(toy: Toy, q: string): boolean {
+  const range = decadeRangeForQuery(q);
+  if (!range) return false;
+  const [start, end] = range;
+  // Two-digit shorthand ("50s"): try every century the collection could span.
+  const candidateStarts = end - start === 0 ? [1800 + start, 1900 + start, 2000 + start] : [start];
+  return candidateStarts.some((decadeStart) => {
+    const decadeEnd = end - start === 0 ? decadeStart + 9 : end;
+    const first = Number(toy.firstYear);
+    const last = Number(toy.lastYear) || first;
+    if (Number.isNaN(first)) return false;
+    return first <= decadeEnd && last >= decadeStart;
+  });
+}
+
 export function filterToys(filters: ToyFilters): Toy[] {
   const q = filters.q?.trim().toLowerCase();
   return toys.filter((t) => {
@@ -56,8 +123,30 @@ export function filterToys(filters: ToyFilters): Toy[] {
     if (filters.mechanism && t.mechanism !== filters.mechanism) return false;
     if (filters.trademark && t.trademark !== filters.trademark) return false;
     if (q) {
-      const haystack = `${t.name} ${t.description ?? ""} ${t.trademark ?? ""}`.toLowerCase();
-      if (!haystack.includes(q)) return false;
+      const manufacturer = getManufacturerByTrademark(t.trademark);
+      const haystack = [
+        t.name,
+        t.description,
+        t.trademark,
+        t.type,
+        t.topic,
+        t.mechanism,
+        t.condition,
+        t.materials,
+        t.model,
+        manufacturer?.manufacturer,
+        manufacturer?.country,
+      ]
+        .filter(Boolean)
+        .join(" ")
+        .toLowerCase();
+
+      const textMatch = haystack.includes(q);
+      const countryMatch = countryMatches(manufacturer?.country, q);
+      const yearMatch = /^\d{4}$/.test(q) ? toyMatchesYear(t, Number(q)) : false;
+      const decadeMatch = toyMatchesDecadeQuery(t, q);
+
+      if (!textMatch && !countryMatch && !yearMatch && !decadeMatch) return false;
     }
     return true;
   });
