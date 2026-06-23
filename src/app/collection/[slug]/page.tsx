@@ -56,7 +56,7 @@ export default async function ToyDetailPage({
               href={`/manufacturers/${manufacturer.slug}`}
               className="text-accent text-sm mt-1 inline-block hover:underline"
             >
-              {manufacturer.manufacturer ?? manufacturer.trademark}
+              {manufacturer.trademark ?? manufacturer.manufacturer}
             </Link>
           ) : toy.trademark ? (
             <p className="text-accent text-sm mt-1">{toy.trademark}</p>
