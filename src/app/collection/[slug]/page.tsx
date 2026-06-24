@@ -43,7 +43,12 @@ export default async function ToyDetailPage({
 
   return (
     <div className="mx-auto max-w-6xl px-4 sm:px-6 py-12">
-      <BackToCollection />
+      <div className="flex items-center justify-between">
+        <BackToCollection />
+        <Link href={`/collection/${toy.slug}/print`} className="text-sm text-muted hover:text-foreground">
+          Print (private)
+        </Link>
+      </div>
 
       <div className="mt-6 grid sm:grid-cols-2 gap-10">
         <ToyGallery name={toy.name} photos={toy.photos} />
