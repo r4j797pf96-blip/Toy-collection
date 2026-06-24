@@ -3,7 +3,7 @@ import ToyCard from "@/components/ToyCard";
 import Pagination from "@/components/Pagination";
 import HideOnScroll from "@/components/HideOnScroll";
 
-const PAGE_SIZE = 24;
+const PAGE_SIZE = 42;
 
 function Select({
   name,

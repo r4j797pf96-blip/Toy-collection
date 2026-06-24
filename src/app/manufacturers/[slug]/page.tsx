@@ -4,7 +4,7 @@ import {
   getManufacturerBySlug,
   getToysByTrademark,
 } from "@/lib/data";
-import ToyCard from "@/components/ToyCard";
+import SortableToyGrid from "@/components/SortableToyGrid";
 
 export function generateStaticParams() {
   return getAllManufacturers().map((m) => ({ slug: m.slug }));
@@ -89,11 +89,7 @@ export default async function ManufacturerDetailPage({
           <h2 className="font-serif text-2xl mb-4">
             Toys by {manufacturer.manufacturer ?? manufacturer.trademark}
           </h2>
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
-            {toys.map((t) => (
-              <ToyCard key={t.id} toy={t} />
-            ))}
-          </div>
+          <SortableToyGrid toys={toys} />
         </section>
       )}
     </div>
