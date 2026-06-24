@@ -214,6 +214,54 @@ function ingestFabricantes(wb) {
     });
 }
 
+const CANONICAL_COUNTRIES = new Set([
+  "Argentina",
+  "China",
+  "Czech Republic",
+  "England",
+  "France",
+  "Germany",
+  "West Germany",
+  "Hong Kong",
+  "Hungary",
+  "India",
+  "Italy",
+  "Japan",
+  "Portugal",
+  "South Korea",
+  "Spain",
+  "Taiwan",
+  "U.K.",
+  "UK",
+  "U.S.A.",
+  "USA",
+  "URSS",
+]);
+
+// Flags likely data-entry mistakes in the spreadsheet so they can be fixed at
+// the source instead of silently shipping (e.g. misspelled countries, toy
+// trademarks with no matching manufacturer row).
+function auditData(toys, manufacturers) {
+  const warnings = [];
+  const trademarks = new Set(manufacturers.map((m) => m.trademark));
+
+  const unknownCountries = new Set(
+    manufacturers.map((m) => m.country).filter((c) => c && !CANONICAL_COUNTRIES.has(c))
+  );
+  for (const country of unknownCountries) {
+    warnings.push(`Unrecognized manufacturer country: "${country}"`);
+  }
+
+  const unmatchedTrademarks = new Set(
+    toys.map((t) => t.trademark).filter((tm) => tm && !trademarks.has(tm))
+  );
+  for (const tm of unmatchedTrademarks) {
+    warnings.push(`Toy trademark with no matching manufacturer: "${tm}"`);
+  }
+
+  return warnings;
+}
+
 function main() {
   if (!fs.existsSync(SOURCE_FILE)) {
     console.error(`Missing spreadsheet at ${SOURCE_FILE}`);
@@ -245,6 +293,12 @@ function main() {
   console.log(
     `Ingested ${toys.length} toys, ${books.length} books, ${manufacturers.length} manufacturers.`
   );
+
+  const warnings = auditData(toys, manufacturers);
+  if (warnings.length > 0) {
+    console.warn(`\n${warnings.length} data-quality warning(s):`);
+    for (const w of warnings) console.warn(`  - ${w}`);
+  }
 }
 
 function countBy(arr, key) {
