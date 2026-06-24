@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 interface RandomToy {
   slug: string;
@@ -14,40 +14,58 @@ interface RandomToy {
 
 export default function RandomToySpotlight() {
   const [toy, setToy] = useState<RandomToy | null>(null);
+  const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
+  const fetchRandomToy = useCallback(() => {
+    setLoading(true);
     fetch("/api/random-toy", { cache: "no-store" })
       .then((res) => res.json())
       .then(setToy)
-      .catch(() => {});
+      .catch(() => {})
+      .finally(() => setLoading(false));
   }, []);
+
+  useEffect(() => {
+    fetchRandomToy();
+  }, [fetchRandomToy]);
 
   if (!toy) return null;
 
   return (
-    <Link
-      href={`/collection/${toy.slug}`}
-      className="group flex items-center gap-4 border border-border rounded-lg p-4 bg-card hover:shadow-md transition max-w-md"
-    >
-      <div className="relative w-20 h-20 shrink-0 rounded-md overflow-hidden bg-border/40">
-        {toy.photo ? (
-          <Image
-            src={toy.photo}
-            alt={toy.name}
-            fill
-            sizes="80px"
-            className="object-cover group-hover:scale-105 transition duration-300"
-          />
-        ) : null}
-      </div>
-      <div>
-        <p className="text-xs uppercase tracking-wide text-muted mb-1">Random pick</p>
-        <p className="font-medium text-sm leading-snug">{toy.name}</p>
-        <p className="text-xs text-muted mt-1">
-          {toy.trademark ?? "Unknown maker"}
-          {toy.firstYear ? ` · ${toy.firstYear}` : ""}
-        </p>
-      </div>
-    </Link>
+    <div className="max-w-xl">
+      <Link
+        href={`/collection/${toy.slug}`}
+        className="group flex items-center gap-6 border border-border rounded-xl p-6 bg-card hover:shadow-md transition"
+      >
+        <div className="relative w-36 h-36 shrink-0 rounded-lg overflow-hidden bg-border/40">
+          {toy.photo ? (
+            <Image
+              src={toy.photo}
+              alt={toy.name}
+              fill
+              sizes="144px"
+              className="object-cover group-hover:scale-105 transition duration-300"
+            />
+          ) : null}
+        </div>
+        <div>
+          <p className="text-xs uppercase tracking-wide text-muted mb-1">Random pick</p>
+          <p className="font-serif text-xl leading-snug">{toy.name}</p>
+          <p className="text-sm text-muted mt-1">
+            {toy.trademark ?? "Unknown maker"}
+            {toy.firstYear ? ` · ${toy.firstYear}` : ""}
+          </p>
+        </div>
+      </Link>
+
+      <button
+        type="button"
+        onClick={fetchRandomToy}
+        disabled={loading}
+        className="mt-3 border border-border px-5 py-2.5 rounded-full text-sm hover:bg-card transition disabled:opacity-50"
+      >
+        {loading ? "Shuffling…" : "Show me another"}
+      </button>
+    </div>
   );
 }

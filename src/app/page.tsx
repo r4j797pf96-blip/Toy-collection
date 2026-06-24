@@ -1,10 +1,7 @@
 import Link from "next/link";
-import { getResearchHighlights } from "@/lib/data";
 import RandomToySpotlight from "@/components/RandomToySpotlight";
 
 export default function Home() {
-  const highlights = getResearchHighlights();
-
   return (
     <div>
       <section className="mx-auto max-w-6xl px-4 sm:px-6 pt-16 pb-20">
@@ -36,28 +33,6 @@ export default function Home() {
           <RandomToySpotlight />
         </div>
       </section>
-
-      {highlights.length > 0 && (
-        <section className="mx-auto max-w-6xl px-4 sm:px-6 pb-20">
-          <h2 className="font-serif text-2xl mb-6">Research highlights</h2>
-          <div className="grid sm:grid-cols-3 gap-4">
-            {highlights.map((toy) => (
-              <Link
-                key={toy.id}
-                href={`/collection/${toy.slug}`}
-                className="border border-border rounded-lg p-4 bg-card hover:shadow-md transition"
-              >
-                <p className="font-medium text-sm">{toy.name}</p>
-                <p className="text-xs text-muted mt-1 mb-2">
-                  {toy.trademark ?? "Unknown maker"}
-                  {toy.firstYear ? ` · ${toy.firstYear}` : ""}
-                </p>
-                <p className="text-sm text-muted leading-relaxed line-clamp-4">{toy.research}</p>
-              </Link>
-            ))}
-          </div>
-        </section>
-      )}
     </div>
   );
 }
