@@ -27,6 +27,17 @@ export function getRelatedToys(toy: Toy, limit = 6): Toy[] {
     .slice(0, limit);
 }
 
+function hashSeed(n: number): number {
+  let h = n * 2654435761;
+  h = (h ^ (h >>> 16)) >>> 0;
+  return h;
+}
+
+export function getResearchHighlights(count = 3): Toy[] {
+  const candidates = toys.filter((t) => (t.research?.trim().length ?? 0) > 40);
+  return [...candidates].sort((a, b) => hashSeed(a.id) - hashSeed(b.id)).slice(0, count);
+}
+
 export function getFilterOptions() {
   const uniq = (values: (string | undefined)[]) =>
     Array.from(new Set(values.filter((v): v is string => Boolean(v)))).sort();
