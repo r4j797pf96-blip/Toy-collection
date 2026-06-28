@@ -123,14 +123,19 @@ export default function Editor() {
     URL.revokeObjectURL(url);
   };
 
+  const gridLabel = activeGrid ? `${activeGrid.cols} × ${activeGrid.rows} ${params.shape}s base` : null;
+
   return (
     <div className="flex flex-col gap-6 p-6 max-w-6xl mx-auto">
-      <h1 className="text-2xl font-semibold">AutoPortrait</h1>
+      <h1 className="text-2xl font-semibold tracking-tight">AutoPortrait</h1>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div className="border border-dashed rounded-lg p-2 flex items-center justify-center min-h-[300px] bg-neutral-50">
+        <Panel
+          title="Original"
+          meta={imageEl ? `${imageEl.naturalWidth} × ${imageEl.naturalHeight}` : undefined}
+        >
           {imageEl ? (
-            <canvas ref={sourceCanvasRef} className="max-w-full max-h-[500px] object-contain" />
+            <canvas ref={sourceCanvasRef} className="max-w-full max-h-full object-contain" />
           ) : (
             <button
               className="text-sm text-neutral-500 underline"
@@ -149,156 +154,215 @@ export default function Editor() {
               if (file) handleFile(file);
             }}
           />
-        </div>
-        <div className="border rounded-lg p-2 flex items-center justify-center min-h-[300px] bg-neutral-50">
-          <canvas ref={outputCanvasRef} className="max-w-full max-h-[500px] object-contain" />
-        </div>
+        </Panel>
+
+        <Panel title="Vector" meta={gridLabel ?? undefined}>
+          <canvas ref={outputCanvasRef} className="max-w-full max-h-full object-contain" />
+        </Panel>
       </div>
 
       {imageEl && (
-        <div
-          className="border rounded-lg p-2 text-center text-sm text-neutral-500 cursor-pointer"
+        <button
+          className="text-sm text-neutral-500 underline self-start"
           onClick={() => fileInputRef.current?.click()}
         >
-          Click either panel to upload a different image
-        </div>
+          Upload a different image
+        </button>
       )}
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        <Control label="Grid columns" value={params.cols}>
-          <input
-            type="range"
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <Card title="Grid density">
+          <Slider
+            value={params.cols}
             min={8}
             max={100}
-            value={params.cols}
-            onChange={(e) => updateParam("cols", Number(e.target.value))}
-            className="w-full"
+            onChange={(v) => updateParam("cols", v)}
           />
-        </Control>
+        </Card>
 
-        <Control label="Colors" value={params.colorCount}>
-          <input
-            type="range"
+        <Card title="Colors">
+          <Slider
+            value={params.colorCount}
             min={2}
             max={24}
-            value={params.colorCount}
-            onChange={(e) => updateParam("colorCount", Number(e.target.value))}
-            className="w-full"
+            onChange={(v) => updateParam("colorCount", v)}
           />
-        </Control>
+        </Card>
 
-        <Control label="Contrast" value={params.contrast}>
-          <input
-            type="range"
+        <Card title="Contrast">
+          <Slider
+            value={params.contrast}
             min={0}
             max={100}
-            value={params.contrast}
-            onChange={(e) => updateParam("contrast", Number(e.target.value))}
-            className="w-full"
+            onChange={(v) => updateParam("contrast", v)}
           />
-        </Control>
+        </Card>
 
-        <Control label="Background">
+        <Card title="Background">
           <input
             type="color"
             value={rgbToHexInput(params.background)}
             onChange={(e) => updateParam("background", hexToRgb(e.target.value))}
-            className="w-full h-9"
+            className="w-full h-9 rounded border cursor-pointer"
           />
-        </Control>
-      </div>
+        </Card>
 
-      <div className="flex flex-wrap gap-4 items-end">
-        <fieldset className="flex gap-2">
-          <legend className="text-xs text-neutral-500 mb-1">Shape</legend>
-          {(["circle", "capsule", "square", "line"] as ShapePrimitive[]).map((s) => (
+        <Card title="Shape">
+          <div className="grid grid-cols-2 gap-1.5">
+            {(["circle", "capsule", "square", "line"] as ShapePrimitive[]).map((s) => (
+              <button
+                key={s}
+                onClick={() => updateParam("shape", s)}
+                className={`px-2 py-1.5 rounded text-sm border transition-colors ${
+                  params.shape === s ? "bg-black text-white border-black" : "bg-white hover:bg-neutral-50"
+                }`}
+              >
+                {s}
+              </button>
+            ))}
+          </div>
+        </Card>
+
+        <Card title="Merge same colors">
+          <div className="flex flex-col gap-1.5 text-sm">
+            <label className="flex items-center gap-2">
+              <input
+                type="checkbox"
+                checked={params.mergeAxes.columns}
+                onChange={(e) =>
+                  updateParam("mergeAxes", { ...params.mergeAxes, columns: e.target.checked })
+                }
+              />
+              Columns
+            </label>
+            <label className="flex items-center gap-2">
+              <input
+                type="checkbox"
+                checked={params.mergeAxes.rows}
+                onChange={(e) => updateParam("mergeAxes", { ...params.mergeAxes, rows: e.target.checked })}
+              />
+              Rows
+            </label>
+          </div>
+        </Card>
+
+        <Card title="Export" className="sm:col-span-2 lg:col-span-2">
+          <div className="flex gap-2">
             <button
-              key={s}
-              onClick={() => updateParam("shape", s)}
-              className={`px-3 py-1.5 rounded text-sm border ${
-                params.shape === s ? "bg-black text-white" : "bg-white"
-              }`}
+              onClick={exportPng}
+              className="flex-1 px-3 py-1.5 rounded text-sm border bg-white hover:bg-neutral-50 disabled:opacity-40 disabled:hover:bg-white"
+              disabled={!imageEl}
             >
-              {s}
+              Download PNG
             </button>
-          ))}
-        </fieldset>
-
-        <fieldset className="flex gap-3 items-center">
-          <legend className="text-xs text-neutral-500 mb-1">Merge same colors</legend>
-          <label className="text-sm flex items-center gap-1">
-            <input
-              type="checkbox"
-              checked={params.mergeAxes.columns}
-              onChange={(e) =>
-                updateParam("mergeAxes", { ...params.mergeAxes, columns: e.target.checked })
-              }
-            />
-            Columns
-          </label>
-          <label className="text-sm flex items-center gap-1">
-            <input
-              type="checkbox"
-              checked={params.mergeAxes.rows}
-              onChange={(e) => updateParam("mergeAxes", { ...params.mergeAxes, rows: e.target.checked })}
-            />
-            Rows
-          </label>
-        </fieldset>
-
-        <div className="flex gap-2">
-          <button onClick={exportPng} className="px-3 py-1.5 rounded text-sm border bg-white" disabled={!imageEl}>
-            Download PNG
-          </button>
-          <button onClick={exportSvg} className="px-3 py-1.5 rounded text-sm border bg-white" disabled={!imageEl}>
-            Download SVG
-          </button>
-        </div>
+            <button
+              onClick={exportSvg}
+              className="flex-1 px-3 py-1.5 rounded text-sm border bg-white hover:bg-neutral-50 disabled:opacity-40 disabled:hover:bg-white"
+              disabled={!imageEl}
+            >
+              Download SVG
+            </button>
+          </div>
+        </Card>
       </div>
 
       {activeGrid && (
-        <div>
-          <div className="flex items-center justify-between mb-2">
-            <h2 className="text-sm font-medium">Palette</h2>
-            <button onClick={resetPalette} className="text-xs underline text-neutral-500">
+        <Card
+          title="Palette"
+          action={
+            <button onClick={resetPalette} className="text-xs underline text-neutral-500 hover:text-neutral-800">
               Revert to auto palette
             </button>
-          </div>
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+          }
+        >
+          <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-2">
             {activeGrid.palette.map((color, i) => (
-              <label key={i} className="flex items-center gap-2 border rounded px-2 py-1 text-xs">
+              <label
+                key={i}
+                className="flex items-center gap-2 border rounded px-2 py-1 text-xs font-mono"
+              >
                 <input
                   type="color"
                   value={rgbToHexInput(color)}
                   onChange={(e) => updateSwatch(i, e.target.value)}
-                  className="w-6 h-6 shrink-0"
+                  className="w-6 h-6 shrink-0 cursor-pointer"
                 />
                 {rgbToHexInput(color)}
               </label>
             ))}
           </div>
-        </div>
+        </Card>
       )}
     </div>
   );
 }
 
-function Control({
-  label,
-  value,
+function Panel({
+  title,
+  meta,
   children,
 }: {
-  label: string;
-  value?: number;
+  title: string;
+  meta?: string;
   children: React.ReactNode;
 }) {
   return (
     <div>
-      <div className="flex justify-between text-xs text-neutral-500 mb-1">
-        <span>{label}</span>
-        {value !== undefined && <span>{value}</span>}
+      <div className="flex items-baseline justify-between mb-1.5">
+        <h2 className="text-sm font-medium">{title}</h2>
+        {meta && <span className="text-xs text-neutral-400">{meta}</span>}
+      </div>
+      <div className="border rounded-lg p-2 flex items-center justify-center h-[420px] bg-neutral-50">
+        {children}
+      </div>
+    </div>
+  );
+}
+
+function Card({
+  title,
+  action,
+  className,
+  children,
+}: {
+  title: string;
+  action?: React.ReactNode;
+  className?: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <div className={`border rounded-lg p-3 bg-white ${className ?? ""}`}>
+      <div className="flex items-center justify-between mb-2">
+        <h3 className="text-xs font-medium text-neutral-500 uppercase tracking-wide">{title}</h3>
+        {action}
       </div>
       {children}
+    </div>
+  );
+}
+
+function Slider({
+  value,
+  min,
+  max,
+  onChange,
+}: {
+  value: number;
+  min: number;
+  max: number;
+  onChange: (value: number) => void;
+}) {
+  return (
+    <div>
+      <div className="flex justify-end text-xs text-neutral-400 mb-1">{value}</div>
+      <input
+        type="range"
+        min={min}
+        max={max}
+        value={value}
+        onChange={(e) => onChange(Number(e.target.value))}
+        className="w-full"
+      />
     </div>
   );
 }
