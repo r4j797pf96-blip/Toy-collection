@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import { useCallback, useEffect, useState } from "react";
 
@@ -39,12 +38,12 @@ export default function RandomToySpotlight() {
       >
         <div className="relative w-36 h-36 shrink-0 rounded-lg overflow-hidden bg-border/40">
           {toy.photo ? (
-            <Image
+            // eslint-disable-next-line @next/next/no-img-element
+            <img
               src={toy.photo}
               alt={toy.name}
-              fill
-              sizes="144px"
-              className="object-cover group-hover:scale-105 transition duration-300"
+              loading="lazy"
+              className="w-full h-full object-cover group-hover:scale-105 transition duration-300"
             />
           ) : null}
         </div>

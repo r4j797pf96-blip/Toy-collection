@@ -1,4 +1,3 @@
-import Image from "next/image";
 import Link from "next/link";
 import type { Toy } from "@/lib/types";
 
@@ -10,12 +9,12 @@ export default function ToyCard({ toy }: { toy: Toy }) {
     >
       <div className="relative aspect-square bg-border/40 overflow-hidden">
         {toy.photos[0] ? (
-          <Image
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
             src={toy.photos[0]}
             alt={toy.name}
-            fill
-            sizes="(min-width: 1024px) 22vw, (min-width: 640px) 30vw, 45vw"
-            className="object-cover group-hover:scale-105 transition duration-300"
+            loading="lazy"
+            className="w-full h-full object-cover group-hover:scale-105 transition duration-300"
           />
         ) : (
           <div className="w-full h-full flex items-center justify-center text-muted text-xs">
