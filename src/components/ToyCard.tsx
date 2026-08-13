@@ -12,7 +12,7 @@ export default function ToyCard({ toy }: { toy: Toy }) {
           // eslint-disable-next-line @next/next/no-img-element
           <img
             src={toy.photos[0]}
-            alt={toy.name}
+            alt={toy.displayName}
             loading="lazy"
             className="w-full h-full object-cover group-hover:scale-105 transition duration-300"
           />
@@ -23,7 +23,7 @@ export default function ToyCard({ toy }: { toy: Toy }) {
         )}
       </div>
       <div className="p-3">
-        <p className="text-sm font-medium leading-snug line-clamp-2">{toy.name}</p>
+        <p className="text-sm font-medium leading-snug line-clamp-2">{toy.displayName}</p>
         <p className="text-xs text-muted mt-1">
           {toy.trademark ?? "Unknown maker"}
           {toy.firstYear ? ` · ${toy.firstYear}` : ""}

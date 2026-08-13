@@ -10,6 +10,7 @@ export async function GET() {
   return NextResponse.json({
     slug: toy.slug,
     name: toy.name,
+    displayName: toy.displayName,
     trademark: toy.trademark,
     firstYear: toy.firstYear,
     photo: toy.photos[0],

@@ -23,7 +23,7 @@ function sortToys(toys: Toy[], sort: SortOption): Toy[] {
       return sorted.sort((a, b) => (year(b) ?? -Infinity) - (year(a) ?? -Infinity));
     case "name-asc":
     default:
-      return sorted.sort((a, b) => a.name.localeCompare(b.name));
+      return sorted.sort((a, b) => a.displayName.localeCompare(b.displayName));
   }
 }
 

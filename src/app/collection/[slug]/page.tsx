@@ -46,10 +46,15 @@ export default async function ToyDetailPage({
       <BackToCollection />
 
       <div className="mt-6 grid sm:grid-cols-2 gap-10">
-        <ToyGallery name={toy.name} photos={toy.photos} />
+        <ToyGallery name={toy.displayName} photos={toy.photos} />
 
         <div>
-          <h1 className="font-serif text-3xl leading-tight">{toy.name}</h1>
+          <h1 className="font-serif text-3xl leading-tight">{toy.displayName}</h1>
+          {toy.aliases.length > 0 && (
+            <p className="text-xs text-muted mt-1">
+              Also known as {toy.aliases.join(" · ")}
+            </p>
+          )}
           {manufacturer ? (
             <Link
               href={`/manufacturers/${manufacturer.slug}`}

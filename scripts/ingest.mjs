@@ -97,6 +97,12 @@ function findImage(photoId) {
   return null;
 }
 
+// Splits a name like "Foo Bar or Baz or Qux" into { displayName: "Foo Bar", aliases: ["Baz", "Qux"] }.
+function parseName(raw) {
+  const parts = raw.split(/\s+or\s+/i).map((s) => s.trim()).filter(Boolean);
+  return { displayName: parts[0] ?? raw, aliases: parts.slice(1) };
+}
+
 function ingestBrinquedos(wb) {
   const ws = wb.Sheets["brinquedos"];
   const rows = XLSX.utils.sheet_to_json(ws, { header: 1, defval: undefined });
@@ -107,12 +113,15 @@ function ingestBrinquedos(wb) {
     .map((r) => {
       const id = Number(r[0]);
       const name = cell(r, 1);
+      const { displayName, aliases } = parseName(name);
       const photoIds = [cell(r, 22), cell(r, 23), cell(r, 24), cell(r, 25)].filter(Boolean);
 
       return {
         id,
-        slug: `${id}-${slugify(name)}`,
+        slug: `${id}-${slugify(displayName)}`,
         name,
+        displayName,
+        aliases,
         model: cell(r, 2),
         type: normalizeLabel(cell(r, 3)),
         topic: normalizeLabel(cell(r, 4)),
@@ -216,6 +225,7 @@ function ingestFabricantes(wb) {
 
 const CANONICAL_COUNTRIES = new Set([
   "Argentina",
+  "Canada",
   "China",
   "Czech Republic",
   "England",
@@ -257,6 +267,15 @@ function auditData(toys, manufacturers) {
   );
   for (const tm of unmatchedTrademarks) {
     warnings.push(`Toy trademark with no matching manufacturer: "${tm}"`);
+  }
+
+  // Flag toy names where a word contains a lowercase letter immediately followed
+  // by an uppercase letter — a strong signal of a merged-word typo (e.g. "CreamPpop").
+  const camelCaseWord = /[a-z][A-Z]/;
+  for (const toy of toys) {
+    if (camelCaseWord.test(toy.name)) {
+      warnings.push(`Suspected name typo in #${toy.id} "${toy.name}" — check for merged words`);
+    }
   }
 
   return warnings;

@@ -136,6 +136,7 @@ export function filterToys(filters: ToyFilters): Toy[] {
       const manufacturer = getManufacturerByTrademark(t.trademark);
       const haystack = [
         t.name,
+        ...t.aliases,
         t.description,
         t.trademark,
         t.type,
@@ -178,18 +179,18 @@ export function sortToys(list: Toy[], sort?: string): Toy[] {
 
   switch (sort) {
     case "name-desc":
-      return sorted.sort((a, b) => b.name.localeCompare(a.name));
+      return sorted.sort((a, b) => b.displayName.localeCompare(a.displayName));
     case "year-asc":
       return sorted.sort((a, b) => (year(a) ?? Infinity) - (year(b) ?? Infinity));
     case "year-desc":
       return sorted.sort((a, b) => (year(b) ?? -Infinity) - (year(a) ?? -Infinity));
     case "trademark-asc":
       return sorted.sort(
-        (a, b) => (a.trademark ?? "").localeCompare(b.trademark ?? "") || a.name.localeCompare(b.name)
+        (a, b) => (a.trademark ?? "").localeCompare(b.trademark ?? "") || a.displayName.localeCompare(b.displayName)
       );
     case "name-asc":
     default:
-      return sorted.sort((a, b) => a.name.localeCompare(b.name));
+      return sorted.sort((a, b) => a.displayName.localeCompare(b.displayName));
   }
 }
 

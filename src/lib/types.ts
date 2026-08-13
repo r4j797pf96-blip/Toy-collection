@@ -20,6 +20,8 @@ export interface Toy {
   id: number;
   slug: string;
   name: string;
+  displayName: string;
+  aliases: string[];
   model?: string;
   type?: string;
   topic?: string;

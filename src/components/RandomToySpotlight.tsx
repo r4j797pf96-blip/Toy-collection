@@ -6,6 +6,7 @@ import { useCallback, useEffect, useState } from "react";
 interface RandomToy {
   slug: string;
   name: string;
+  displayName: string;
   trademark?: string;
   firstYear?: string;
   photo?: string;
@@ -41,7 +42,7 @@ export default function RandomToySpotlight() {
             // eslint-disable-next-line @next/next/no-img-element
             <img
               src={toy.photo}
-              alt={toy.name}
+              alt={toy.displayName}
               loading="lazy"
               className="w-full h-full object-cover group-hover:scale-105 transition duration-300"
             />
@@ -49,7 +50,7 @@ export default function RandomToySpotlight() {
         </div>
         <div>
           <p className="text-xs uppercase tracking-wide text-muted mb-1">Random pick</p>
-          <p className="font-serif text-xl leading-snug">{toy.name}</p>
+          <p className="font-serif text-xl leading-snug">{toy.displayName}</p>
           <p className="text-sm text-muted mt-1">
             {toy.trademark ?? "Unknown maker"}
             {toy.firstYear ? ` · ${toy.firstYear}` : ""}
