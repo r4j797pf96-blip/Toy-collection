@@ -115,6 +115,28 @@ export default async function ToyDetailPage({
         </div>
       </div>
 
+      {(toy.mechPhotos.length > 0 || toy.mechDescription) && (
+        <section id="mechanism" className="mt-16 scroll-mt-20">
+          <h2 className="font-serif text-2xl mb-6">How it works</h2>
+          {toy.mechPhotos.length > 0 && (
+            <div className={`grid gap-4 mb-6 ${toy.mechPhotos.length > 1 ? "sm:grid-cols-2" : "max-w-2xl"}`}>
+              {toy.mechPhotos.map((src, i) => (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img
+                  key={src}
+                  src={src}
+                  alt={`${toy.displayName} mechanism ${i + 1}`}
+                  className="w-full h-auto rounded-lg"
+                />
+              ))}
+            </div>
+          )}
+          {toy.mechDescription && (
+            <p className="text-sm leading-relaxed max-w-2xl">{toy.mechDescription}</p>
+          )}
+        </section>
+      )}
+
       {related.length > 0 && (
         <section className="mt-16">
           <h2 className="font-serif text-2xl mb-4">Related toys</h2>

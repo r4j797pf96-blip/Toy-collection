@@ -9,8 +9,10 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, "..");
 const SOURCE_FILE = path.join(ROOT, "data/source/collection.xlsx");
 const IMAGES_DIR = path.join(ROOT, "data/source/images");
+const MECH_IMAGES_DIR = path.join(ROOT, "data/source/images/Photos_mechanisms");
 const OUT_DIR = path.join(ROOT, "src/data/generated");
 const PUBLIC_IMAGES_DIR = path.join(ROOT, "public/images/toys");
+const PUBLIC_MECH_DIR = path.join(ROOT, "public/images/mechanisms");
 
 function slugify(str) {
   return String(str)
@@ -97,6 +99,35 @@ function findImage(photoId) {
   return null;
 }
 
+let mechFilesByLowerName = null;
+function getMechFilesByLowerName() {
+  if (!mechFilesByLowerName) {
+    mechFilesByLowerName = new Map();
+    if (fs.existsSync(MECH_IMAGES_DIR)) {
+      for (const f of fs.readdirSync(MECH_IMAGES_DIR)) {
+        mechFilesByLowerName.set(f.toLowerCase(), f);
+      }
+    }
+  }
+  return mechFilesByLowerName;
+}
+
+function findMechImage(photoRef) {
+  if (!photoRef) return null;
+  const exts = [".jpg", ".jpeg", ".png", ".webp"];
+  const byLowerName = getMechFilesByLowerName();
+  // Try the raw value first (may already include extension), then with each ext appended.
+  const candidates = [photoRef, ...exts.map((e) => `${photoRef}${e}`)];
+  for (const candidate of candidates) {
+    const actualName = byLowerName.get(candidate.toLowerCase());
+    if (!actualName) continue;
+    fs.mkdirSync(PUBLIC_MECH_DIR, { recursive: true });
+    fs.copyFileSync(path.join(MECH_IMAGES_DIR, actualName), path.join(PUBLIC_MECH_DIR, actualName));
+    return `/images/mechanisms/${actualName}`;
+  }
+  return null;
+}
+
 // Splits a name like "Foo Bar or Baz or Qux" into { displayName: "Foo Bar", aliases: ["Baz", "Qux"] }.
 function parseName(raw) {
   const parts = raw.split(/\s+or\s+/i).map((s) => s.trim()).filter(Boolean);
@@ -115,6 +146,7 @@ function ingestBrinquedos(wb) {
       const name = cell(r, 1);
       const { displayName, aliases } = parseName(name);
       const photoIds = [cell(r, 22), cell(r, 23), cell(r, 24), cell(r, 25)].filter(Boolean);
+      const mechPhotoRefs = [cell(r, 26), cell(r, 27)].filter(Boolean);
 
       return {
         id,
@@ -140,6 +172,8 @@ function ingestBrinquedos(wb) {
         notes: cell(r, 21),
         photoIds,
         photos: photoIds.map(findImage).filter(Boolean),
+        mechPhotos: mechPhotoRefs.map(findMechImage).filter(Boolean),
+        mechDescription: cell(r, 28),
         // Private fields: stats-only, never rendered on public pages.
         private: {
           cost: cell(r, 15),

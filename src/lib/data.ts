@@ -342,3 +342,7 @@ export function getCollectionInsights() {
     recentlyAdded: [...toys].sort((a, b) => b.id - a.id).slice(0, 8),
   };
 }
+
+export function getToysWithMechanisms(): Toy[] {
+  return toys.filter((t) => t.mechPhotos.length > 0 || t.mechDescription);
+}

@@ -40,6 +40,8 @@ export interface Toy {
   notes?: string;
   photoIds: string[];
   photos: string[];
+  mechPhotos: string[];
+  mechDescription?: string;
   private: ToyPrivate;
 }
 
