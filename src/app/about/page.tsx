@@ -33,12 +33,11 @@ export default function AboutPage() {
           His training is in Mechanical Engineering, and it shows in what
           draws him to these pieces: the resourcefulness and creativity of
           squeezing such complex, memorable movements out of such simple
-          engines has always fascinated him. He&rsquo;s also a Full Professor
-          of Polymer Engineering at the University of Minho, where he&rsquo;s
-          spent his career studying the very materials that, fittingly, make
-          up half the toys on these shelves. It&rsquo;s a fun bit of overlap:
-          decades of research into plastics and polymers, and decades of
-          collecting the toys made from them.
+          engines has always fascinated him. He&rsquo;s spent his career as a
+          university professor studying the very materials that, fittingly,
+          make up half the toys on these shelves. It&rsquo;s a fun bit of
+          overlap: decades of research into plastics and polymers, and decades
+          of collecting the toys made from them.
         </p>
         <p>
           This has always been a family affair. Treasure hunts at flea
