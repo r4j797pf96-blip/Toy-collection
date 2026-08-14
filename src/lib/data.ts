@@ -19,12 +19,18 @@ export function getToyBySlug(slug: string): Toy | undefined {
 
 export function getRelatedToys(toy: Toy, limit = 6): Toy[] {
   return toys
-    .filter(
-      (t) =>
-        t.id !== toy.id &&
-        (t.trademark === toy.trademark || (t.type === toy.type && t.topic === toy.topic))
-    )
-    .slice(0, limit);
+    .filter((t) => t.id !== toy.id)
+    .map((t) => {
+      let score = 0;
+      if (toy.topic && t.topic === toy.topic) score += 4;
+      if (toy.type && t.type === toy.type) score += 2;
+      if (toy.trademark && t.trademark === toy.trademark) score += 1;
+      return { t, score };
+    })
+    .filter(({ score }) => score > 0)
+    .sort((a, b) => b.score - a.score)
+    .slice(0, limit)
+    .map(({ t }) => t);
 }
 
 function hashSeed(n: number): number {
