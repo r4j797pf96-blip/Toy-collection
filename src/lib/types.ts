@@ -41,6 +41,7 @@ export interface Toy {
   photoIds: string[];
   photos: string[];
   mechPhotos: string[];
+  mechThumbnail?: string;
   mechDescription?: string;
   private: ToyPrivate;
 }

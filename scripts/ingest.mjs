@@ -128,6 +128,23 @@ function findMechImage(photoRef) {
   return null;
 }
 
+// Looks for a thumbnail file named "<mechanism name>_thumbnail.<ext>" in Photos_mechanisms.
+function findMechThumbnail(mechName) {
+  if (!mechName) return null;
+  const exts = [".jpg", ".jpeg", ".png", ".webp"];
+  const byLowerName = getMechFilesByLowerName();
+  const base = `${mechName}_thumbnail`;
+  const candidates = exts.map((e) => `${base}${e}`);
+  for (const candidate of candidates) {
+    const actualName = byLowerName.get(candidate.toLowerCase());
+    if (!actualName) continue;
+    fs.mkdirSync(PUBLIC_MECH_DIR, { recursive: true });
+    fs.copyFileSync(path.join(MECH_IMAGES_DIR, actualName), path.join(PUBLIC_MECH_DIR, actualName));
+    return `/images/mechanisms/${actualName}`;
+  }
+  return null;
+}
+
 // Splits a name like "Foo Bar or Baz or Qux" into { displayName: "Foo Bar", aliases: ["Baz", "Qux"] }.
 function parseName(raw) {
   const parts = raw.split(/\s+or\s+/i).map((s) => s.trim()).filter(Boolean);
@@ -173,6 +190,7 @@ function ingestBrinquedos(wb) {
         photoIds,
         photos: photoIds.map(findImage).filter(Boolean),
         mechPhotos: mechPhotoRefs.map(findMechImage).filter(Boolean),
+        mechThumbnail: findMechThumbnail(normalizeLabel(cell(r, 6))),
         mechDescription: cell(r, 28),
         // Private fields: stats-only, never rendered on public pages.
         private: {

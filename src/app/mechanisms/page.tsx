@@ -25,11 +25,11 @@ export default function MechanismsPage() {
             href={`/collection/${toy.slug}#mechanism`}
             className="group border border-border rounded-xl overflow-hidden bg-card hover:shadow-md transition"
           >
-            {toy.mechPhotos[0] && (
+            {(toy.mechThumbnail ?? toy.mechPhotos[0]) && (
               <div className="aspect-[4/3] overflow-hidden bg-border/40">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
-                  src={toy.mechPhotos[0]}
+                  src={toy.mechThumbnail ?? toy.mechPhotos[0]}
                   alt={`${toy.displayName} mechanism`}
                   loading="lazy"
                   className="w-full h-full object-cover group-hover:scale-105 transition duration-300"
