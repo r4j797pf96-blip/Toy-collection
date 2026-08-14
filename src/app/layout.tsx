@@ -18,6 +18,7 @@ const body = Inter({
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://www.mechanicaltoyarchive.com"),
+  verification: { google: "C94xMipSRyEq3ugPWlAwe7TSjjHTTqhQAqAaL2Jsu8U" },
   title: {
     default: "The Mechanical Toy Archive",
     template: "%s — The Mechanical Toy Archive",
