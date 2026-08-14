@@ -128,19 +128,25 @@ function findMechImage(photoRef) {
   return null;
 }
 
-// Looks for a thumbnail file named "<mechanism name>_thumbnail.<ext>" in Photos_mechanisms.
-function findMechThumbnail(mechName) {
-  if (!mechName) return null;
+// Looks for a thumbnail named "<firstPhotoRef stem>_thumbnail.<ext>".
+// Tries spaces and hyphens interchangeably to handle naming inconsistencies.
+function findMechThumbnail(firstPhotoRef) {
+  if (!firstPhotoRef) return null;
   const exts = [".jpg", ".jpeg", ".png", ".webp"];
   const byLowerName = getMechFilesByLowerName();
-  const base = `${mechName}_thumbnail`;
-  const candidates = exts.map((e) => `${base}${e}`);
-  for (const candidate of candidates) {
-    const actualName = byLowerName.get(candidate.toLowerCase());
-    if (!actualName) continue;
-    fs.mkdirSync(PUBLIC_MECH_DIR, { recursive: true });
-    fs.copyFileSync(path.join(MECH_IMAGES_DIR, actualName), path.join(PUBLIC_MECH_DIR, actualName));
-    return `/images/mechanisms/${actualName}`;
+  // Strip extension if the ref already has one.
+  const stem = firstPhotoRef.replace(/\.(jpg|jpeg|png|webp)$/i, "");
+  // Try the stem as-is, then with spaces→hyphens and hyphens→spaces.
+  const stemVariants = [stem, stem.replace(/ /g, "-"), stem.replace(/-/g, " ")];
+  for (const variant of stemVariants) {
+    const base = `${variant}_thumbnail`;
+    for (const ext of exts) {
+      const actualName = byLowerName.get(`${base}${ext}`.toLowerCase());
+      if (!actualName) continue;
+      fs.mkdirSync(PUBLIC_MECH_DIR, { recursive: true });
+      fs.copyFileSync(path.join(MECH_IMAGES_DIR, actualName), path.join(PUBLIC_MECH_DIR, actualName));
+      return `/images/mechanisms/${actualName}`;
+    }
   }
   return null;
 }
@@ -190,7 +196,7 @@ function ingestBrinquedos(wb) {
         photoIds,
         photos: photoIds.map(findImage).filter(Boolean),
         mechPhotos: mechPhotoRefs.map(findMechImage).filter(Boolean),
-        mechThumbnail: findMechThumbnail(normalizeLabel(cell(r, 6))),
+        mechThumbnail: findMechThumbnail(mechPhotoRefs[0]),
         mechDescription: cell(r, 28),
         // Private fields: stats-only, never rendered on public pages.
         private: {
