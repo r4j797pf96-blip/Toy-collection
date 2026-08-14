@@ -50,8 +50,18 @@ export default async function ManufacturerDetailPage({
     ["Founder", manufacturer.founder],
   ];
 
+  const breadcrumbLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Manufacturers", item: "https://www.mechanicaltoyarchive.com/manufacturers" },
+      { "@type": "ListItem", position: 2, name: manufacturer.manufacturer ?? manufacturer.trademark, item: `https://www.mechanicaltoyarchive.com/manufacturers/${manufacturer.slug}` },
+    ],
+  };
+
   return (
     <div className="mx-auto max-w-6xl px-4 sm:px-6 py-12">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }} />
       <h1 className="font-serif text-3xl">{manufacturer.manufacturer ?? manufacturer.trademark}</h1>
       {manufacturer.trademark && manufacturer.trademark !== manufacturer.manufacturer && (
         <p className="text-accent text-sm mt-1">Trademark: {manufacturer.trademark}</p>
@@ -95,7 +105,7 @@ export default async function ManufacturerDetailPage({
                 <a
                   href={url}
                   target="_blank"
-                  rel="noopener noreferrer"
+                  rel="nofollow noopener noreferrer"
                   className="text-accent hover:underline"
                 >
                   {url}

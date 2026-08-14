@@ -66,6 +66,15 @@ export default async function ToyDetailPage({
     ["Box", toy.boxDescription],
   ];
 
+  const breadcrumbLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Collection", item: "https://www.mechanicaltoyarchive.com/collection" },
+      { "@type": "ListItem", position: 2, name: toy.displayName, item: `https://www.mechanicaltoyarchive.com/collection/${toy.slug}` },
+    ],
+  };
+
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "CollectibleItem",
@@ -87,10 +96,8 @@ export default async function ToyDetailPage({
 
   return (
     <div className="mx-auto max-w-6xl px-4 sm:px-6 py-12">
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-      />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <BackToCollection />
 
       <div className="mt-6 grid sm:grid-cols-2 gap-10">
