@@ -118,9 +118,9 @@ export default async function ToyDetailPage({
       {(toy.mechPhotos.length > 0 || toy.mechDescription) && (
         <section id="mechanism" className="mt-16 scroll-mt-20">
           <h2 className="font-serif text-2xl mb-6">How it works</h2>
-          <div className="flex flex-col sm:flex-row sm:items-start gap-6 sm:gap-10">
+          <div className="grid sm:grid-cols-2 gap-10">
             {toy.mechPhotos.length > 0 && (
-              <div className="flex flex-col gap-4 sm:w-1/2 shrink-0">
+              <div className="flex flex-col gap-4">
                 {toy.mechPhotos.map((src, i) => (
                   // eslint-disable-next-line @next/next/no-img-element
                   <img
@@ -133,7 +133,7 @@ export default async function ToyDetailPage({
               </div>
             )}
             {toy.mechDescription && (
-              <div className="sm:sticky sm:top-24 sm:w-1/2">
+              <div className="sm:sticky sm:top-24">
                 <p className="text-sm leading-relaxed">{toy.mechDescription}</p>
               </div>
             )}
