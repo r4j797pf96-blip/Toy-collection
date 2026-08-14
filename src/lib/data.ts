@@ -349,6 +349,19 @@ export function getCollectionInsights() {
   };
 }
 
+export function getToyDescription(toy: Toy): string {
+  if (toy.description) return toy.description;
+  const manufacturer = getManufacturerByTrademark(toy.trademark);
+  const parts: string[] = [];
+  if (toy.type) parts.push(toy.type);
+  if (toy.topic) parts.push(`with ${toy.topic} theme`);
+  if (toy.trademark ?? manufacturer?.manufacturer)
+    parts.push(`by ${toy.trademark ?? manufacturer?.manufacturer}`);
+  if (manufacturer?.country) parts.push(`(${manufacturer.country})`);
+  if (toy.firstYear) parts.push(toy.lastYear && toy.lastYear !== toy.firstYear ? `manufactured ${toy.firstYear}–${toy.lastYear}` : `manufactured ${toy.firstYear}`);
+  return parts.length ? parts.join(", ") + "." : toy.displayName;
+}
+
 export function getToysWithMechanisms(): Toy[] {
   return toys.filter((t) => t.mechPhotos.length > 0 || t.mechDescription);
 }

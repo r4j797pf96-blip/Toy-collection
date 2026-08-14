@@ -7,6 +7,7 @@ import {
   getManufacturerByTrademark,
   getRelatedToys,
   getToyBySlug,
+  getToyDescription,
 } from "@/lib/data";
 import BackToCollection from "@/components/BackToCollection";
 import ToyCard from "@/components/ToyCard";
@@ -26,9 +27,7 @@ export async function generateMetadata({
   if (!toy) return {};
 
   const manufacturer = getManufacturerByTrademark(toy.trademark);
-  const parts = [toy.trademark ?? manufacturer?.manufacturer, toy.firstYear].filter(Boolean);
-  const description = toy.description
-    ?? `${toy.type ?? "Mechanical toy"}${parts.length ? ` by ${parts.join(", ")}` : ""}.`;
+  const description = getToyDescription(toy);
 
   return {
     title: toy.displayName,
@@ -67,8 +66,31 @@ export default async function ToyDetailPage({
     ["Box", toy.boxDescription],
   ];
 
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "CollectibleItem",
+    name: toy.displayName,
+    description: getToyDescription(toy),
+    image: toy.photos[0] ? `https://www.mechanicaltoyarchive.com${toy.photos[0]}` : undefined,
+    brand: toy.trademark ? { "@type": "Brand", name: toy.trademark } : undefined,
+    manufacturer: manufacturer
+      ? {
+          "@type": "Organization",
+          name: manufacturer.manufacturer ?? manufacturer.trademark,
+          address: manufacturer.country ? { "@type": "PostalAddress", addressCountry: manufacturer.country } : undefined,
+        }
+      : undefined,
+    material: toy.materials,
+    productionDate: [toy.firstYear, toy.lastYear].filter(Boolean).join("/") || undefined,
+    url: `https://www.mechanicaltoyarchive.com/collection/${toy.slug}`,
+  };
+
   return (
     <div className="mx-auto max-w-6xl px-4 sm:px-6 py-12">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <BackToCollection />
 
       <div className="mt-6 grid sm:grid-cols-2 gap-10">
@@ -153,6 +175,8 @@ export default async function ToyDetailPage({
                     key={src}
                     src={src}
                     alt={`${toy.displayName} mechanism ${i + 1}`}
+                    width={800}
+                    height={600}
                     className="w-full h-auto rounded-lg"
                   />
                 ))}

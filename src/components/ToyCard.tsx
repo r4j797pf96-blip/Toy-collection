@@ -14,6 +14,8 @@ export default function ToyCard({ toy }: { toy: Toy }) {
             src={toy.photos[0]}
             alt={toy.displayName}
             loading="lazy"
+            width={400}
+            height={400}
             className="w-full h-full object-cover group-hover:scale-105 transition duration-300"
           />
         ) : (

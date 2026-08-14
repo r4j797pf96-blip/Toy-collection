@@ -1,0 +1,24 @@
+# The Mechanical Toy Archive
+
+A catalogued collection of antique mechanical toys — tin, clockwork, and battery-operated — assembled over decades by a private collector.
+
+## What this site contains
+
+- Over 650 individual toys, each with manufacturer, type, topic, mechanism, materials, dimensions, condition, and manufacturing dates
+- 189 toy manufacturers, with history, country of origin, and founder information
+- 142 reference books on antique mechanical toys
+- Mechanism documentation for selected toys, with annotated photographs and technical descriptions
+
+## Collections
+
+- /collection — Full browsable archive of toys with filtering by type, topic, mechanism, and manufacturer
+- /manufacturers — Directory of toy manufacturers
+- /mechanisms — Internal mechanism documentation for selected toys
+- /library — Reference bibliography
+
+## About
+
+The collection focuses on tin toys, clockwork mechanisms, and battery-operated novelties primarily from the 1930s–1980s, spanning manufacturers from Japan, Germany, the USA, the UK, France, Italy, and beyond.
+
+Site: https://www.mechanicaltoyarchive.com
+Sitemap: https://www.mechanicaltoyarchive.com/sitemap.xml
