@@ -17,8 +17,16 @@ const body = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "The Mechanical Toy Archive",
-  description: "A catalogued collection of antique tin and battery-operated toys.",
+  metadataBase: new URL("https://www.mechanicaltoyarchive.com"),
+  title: {
+    default: "The Mechanical Toy Archive",
+    template: "%s — The Mechanical Toy Archive",
+  },
+  description: "A catalogued collection of antique mechanical toys — tin, clockwork and battery-operated — spanning decades of toy-making history.",
+  openGraph: {
+    siteName: "The Mechanical Toy Archive",
+    type: "website",
+  },
 };
 
 export default function RootLayout({

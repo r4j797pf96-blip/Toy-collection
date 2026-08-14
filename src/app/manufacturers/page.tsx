@@ -1,5 +1,11 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { getAllManufacturers, getAllToys } from "@/lib/data";
+
+export const metadata: Metadata = {
+  title: "Manufacturers",
+  description: "Directory of toy manufacturers represented in the archive, spanning Japan, Germany, the USA, and beyond.",
+};
 
 export default async function ManufacturersPage({
   searchParams,

@@ -1,5 +1,11 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { getAllBooks, getToysReferencingBook } from "@/lib/data";
+
+export const metadata: Metadata = {
+  title: "Library",
+  description: "Reference books on antique mechanical toys used to research and document the collection.",
+};
 
 export default function LibraryPage() {
   const books = [...getAllBooks()].sort((a, b) => a.title.localeCompare(b.title));

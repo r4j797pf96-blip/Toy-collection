@@ -1,9 +1,29 @@
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getAllBooks, getBookBySlug, getToysReferencingBook } from "@/lib/data";
 import ToyCard from "@/components/ToyCard";
 
 export function generateStaticParams() {
   return getAllBooks().map((b) => ({ slug: b.slug }));
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}): Promise<Metadata> {
+  const { slug } = await params;
+  const book = getBookBySlug(slug);
+  if (!book) return {};
+
+  const parts = [book.authors, book.year, book.publisher].filter(Boolean);
+  const description = parts.length ? parts.join(" · ") : book.title;
+
+  return {
+    title: book.title,
+    description,
+    openGraph: { title: book.title, description },
+  };
 }
 
 export default async function BookDetailPage({

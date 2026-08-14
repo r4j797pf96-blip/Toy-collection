@@ -1,4 +1,10 @@
+import type { Metadata } from "next";
 import { filterToys, getFilterOptions, sortToys, TOY_SORT_OPTIONS } from "@/lib/data";
+
+export const metadata: Metadata = {
+  title: "Collection",
+  description: "Browse over 600 antique mechanical toys — tin, clockwork, and battery-operated — catalogued with manufacturer, mechanism, materials, and condition.",
+};
 import ToyCard from "@/components/ToyCard";
 import Pagination from "@/components/Pagination";
 import HideOnScroll from "@/components/HideOnScroll";

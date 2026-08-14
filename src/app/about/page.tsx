@@ -1,3 +1,10 @@
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "About",
+  description: "The story behind The Mechanical Toy Archive — a private family collection of antique tin and mechanical toys, catalogued and shared.",
+};
+
 export default function AboutPage() {
   return (
     <div className="mx-auto max-w-2xl px-4 sm:px-6 py-16">

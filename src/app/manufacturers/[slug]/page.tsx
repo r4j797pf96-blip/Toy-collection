@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import {
   getAllManufacturers,
@@ -8,6 +9,27 @@ import SortableToyGrid from "@/components/SortableToyGrid";
 
 export function generateStaticParams() {
   return getAllManufacturers().map((m) => ({ slug: m.slug }));
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}): Promise<Metadata> {
+  const { slug } = await params;
+  const m = getManufacturerBySlug(slug);
+  if (!m) return {};
+
+  const name = m.manufacturer ?? m.trademark ?? "";
+  const toys = getToysByTrademark(m.trademark);
+  const description = m.history
+    ?? `${name}${m.country ? `, ${m.country}` : ""}. ${toys.length} toy${toys.length === 1 ? "" : "s"} in the archive.`;
+
+  return {
+    title: name,
+    description,
+    openGraph: { title: name, description },
+  };
 }
 
 export default async function ManufacturerDetailPage({

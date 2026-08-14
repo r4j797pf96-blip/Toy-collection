@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import {
@@ -13,6 +14,31 @@ import ToyGallery from "@/components/ToyGallery";
 
 export function generateStaticParams() {
   return getAllToys().map((t) => ({ slug: t.slug }));
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}): Promise<Metadata> {
+  const { slug } = await params;
+  const toy = getToyBySlug(slug);
+  if (!toy) return {};
+
+  const manufacturer = getManufacturerByTrademark(toy.trademark);
+  const parts = [toy.trademark ?? manufacturer?.manufacturer, toy.firstYear].filter(Boolean);
+  const description = toy.description
+    ?? `${toy.type ?? "Mechanical toy"}${parts.length ? ` by ${parts.join(", ")}` : ""}.`;
+
+  return {
+    title: toy.displayName,
+    description,
+    openGraph: {
+      title: toy.displayName,
+      description,
+      images: toy.photos[0] ? [{ url: toy.photos[0] }] : [],
+    },
+  };
 }
 
 export default async function ToyDetailPage({
